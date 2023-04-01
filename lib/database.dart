@@ -7,12 +7,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 class Database{
 
   Admin_Login(email,password) async {
-    var s=false;
+    var s='';
     try{
       await Firestore.instance.collection("admin").get().then((querySnapshot) {
         querySnapshot.forEach((result) {
           if(email==result.map['email'] && password==result.map['password']){
-            s=true;
+            s=result.map['name'];
           }
         });
       });

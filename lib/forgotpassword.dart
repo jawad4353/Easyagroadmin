@@ -49,8 +49,8 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView(
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                  Row(children: [
                    IconButton(onPressed:(){
@@ -59,7 +59,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                  ],),
 
                   Lottie.asset('images/otp_animation.json',height:size.height*0.20),
-                  Text('\nVerify OTP ', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),),
+                  Text('\nForgot Password ', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,),),
                   Text('Enter your email and get OTP.Verify OTP and enter new password',style: TextStyle(color: Colors.grey),),
                   Text(''),
                   if(!mail_sent)
@@ -89,8 +89,10 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                            return;
                          }
                          else{
-                           // Send_mail(name,widget.OTP,email.text);
-                           mail_sent=true;
+                           Send_mail(name,widget.OTP,email.text);
+                           setState(() {
+                             mail_sent=true;
+                           });
                            print(mail_sent);
 
                          }
@@ -112,7 +114,20 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                   TextField(
                     controller: password,
                     keyboardType: TextInputType.visiblePassword,
+                    onChanged: (a){
+                      var s=Password_Validation(a);
+                      if(s[0]==null){
+                        return;
+                      }
+                      setState(() {
+                        Password_error_color=s[1];
+                        Password_error=s[0];
+                      });
+                    },
                     decoration: InputDecoration(
+                      errorText: Password_error,
+                      errorStyle: TextStyle(color: Password_error_color),
+                      focusColor: Password_error_color,
                       labelText: 'New Password',
                       suffixIcon: IconButton(onPressed: (){
                         setState(() {
@@ -128,7 +143,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                     ),
                   ),
 
-                  Text(''),
+
                   if(mail_sent)
                   SizedBox(
                     width: double.infinity,
@@ -142,6 +157,10 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         }
                         if(OTP_controller.text!=widget.OTP){
                           EasyLoading.showError('Incorrect OTP');
+                          return;
+                        }
+                        if(password.text.isEmpty){
+                          EasyLoading.showInfo('Enter new password !');
                           return;
                         }
                         var s1=Password_Validation(password.text);
@@ -161,7 +180,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         }
 
                       },
-                      child: Text('Verify'),
+                      child: Text('Update'),
                     ),
                   ),
 

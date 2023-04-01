@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lottie/lottie.dart';
 
+import 'Otpverify.dart';
 import 'database.dart';
 import 'forgotpassword.dart';
 
@@ -197,12 +198,15 @@ class _LoginState extends State<Login> {
                             return;
                           }
                           var result=await new Database().Admin_Login(email.text,password.text);
-                          if(result==false){
+                          if(result==''){
                             EasyLoading.showError('Incorrect Email or Password !');
                             return;
                           }
                           else{
-                            EasyLoading.showError('Sucess!');
+                           var OTP= Generate_OTP();
+                            // Send_mail(result,OTP,email.text);
+                          Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,)));
+                          EasyLoading.dismiss();
                             return;
                           }
 
