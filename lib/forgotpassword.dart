@@ -1,5 +1,6 @@
 
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easyagroadmin/supporting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +27,38 @@ class _ForgotpasswordState extends State<Forgotpassword> {
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 30,
+        leadingWidth: 100,
+        backgroundColor: Colors.white,
+        leading: Row(children: [
+          Image.asset('images/appicon.png'),
+          Text('  EasyAgro',style: TextStyle(color: Colors.grey),)
+        ],),
+
+        actions: [
+          TextButton(onPressed: (){
+            appWindow.minimize();
+          }, child: Text('—',style: TextStyle(color: Colors.grey,fontSize: 20),),),
+          IconButton(onPressed: (){
+            if(appWindow.isMaximized){
+              appWindow.size=Size(800,800);
+              appWindow.maximizeOrRestore();
+
+            }
+            print(appWindow.size.height);
+            if(appWindow.size.height==800.0){
+              appWindow.maximize();
+
+            }
+
+          }, icon: Icon(Icons.web_asset,color: Colors.grey,size: 20,)),
+          IconButton(onPressed: (){
+            appWindow.close();
+          }, icon: Icon(Icons.close,color: Colors.grey,size: 20,)),
+
+        ],),
       body:  Container(
         decoration: BoxDecoration(
           color: Colors.green,

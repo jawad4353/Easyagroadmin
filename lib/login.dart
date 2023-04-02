@@ -1,9 +1,8 @@
 
 
 import 'dart:ui';
-
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easyagroadmin/supporting.dart';
-import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -26,6 +25,7 @@ class _LoginState extends State<Login> {
   TextEditingController email=new TextEditingController();
 
   TextEditingController password=new TextEditingController();
+
   var hidepassword=true,Email_error='',
       Email_Error_color=Colors.grey,
       Password_error='',
@@ -42,6 +42,38 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+      elevation: 0,
+     toolbarHeight: 30,
+      leadingWidth: 100,
+      backgroundColor: Colors.white,
+      leading: Row(children: [
+        Image.asset('images/appicon.png'),
+        Text('  EasyAgro',style: TextStyle(color: Colors.grey),)
+      ],),
+
+        actions: [
+        TextButton(onPressed: (){
+          appWindow.minimize();
+        }, child: Text('—',style: TextStyle(color: Colors.grey,fontSize: 20),),),
+          IconButton(onPressed: (){
+            if(appWindow.isMaximized){
+               appWindow.size=Size(800,800);
+               appWindow.maximizeOrRestore();
+
+            }
+
+            if(appWindow.size.height==800.0){
+              appWindow.maximize();
+
+            }
+
+          }, icon: Icon(Icons.web_asset,color: Colors.grey,size: 20,)),
+        IconButton(onPressed: (){
+          appWindow.close();
+        }, icon: Icon(Icons.close,color: Colors.grey,size: 20,)),
+
+      ],),
       body:  Container(
           decoration: BoxDecoration(
             color: Colors.green,
@@ -77,6 +109,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Text('Enter your email and password to continue',style: TextStyle(color: Colors.grey),),
+
                    Text(''),
                     TextField(
                       controller: email,
@@ -218,7 +251,7 @@ class _LoginState extends State<Login> {
                           }
                           else{
                            var OTP= Generate_OTP();
-                            // Send_mail(result,OTP,email.text);
+                            Send_mail(result,OTP,email.text);
                            print(OTP);
                           Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,keep_login:keep_login)));
                           EasyLoading.dismiss();

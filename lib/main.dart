@@ -1,9 +1,8 @@
 
 
 import 'dart:async';
-
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easyagroadmin/supporting.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -22,11 +21,24 @@ final   projectId= "easyagro-ed808";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 Firestore.initialize(projectId);
-  setWindowTitle('EasyAgro');
   final window = WidgetsBinding.instance.window;
   final screenSize = window.physicalSize / window.devicePixelRatio;
-  setWindowFrame(Rect.fromLTRB(0,0,screenSize.width*1.13,screenSize.height*1.15));
-  setWindowMinSize(Size(screenSize.width*1.13 ,screenSize.height*1.15));
+  setWindowTitle('EasyAgro');
+  var win=appWindow;
+  doWhenWindowReady(() {
+    win = appWindow;
+    var initialSize = Size(800, 800);
+    win.minSize = initialSize;
+
+    win.size = initialSize;
+    win.alignment = Alignment.center;
+    win.title = "Custom window with Flutter";
+    win.show();
+  });
+  // Set_windowsize(screenSize.height,screenSize.width);
+  // setWindowFrame(Rect.fromLTRB(0,0,screenSize.width*1.13,screenSize.height*1.15));
+  // setWindowMinSize(Size(screenSize.width*1.13 ,screenSize.height*1.15));
+
   runApp(MyApp());
 
 }
@@ -50,10 +62,6 @@ class MyApp extends StatelessWidget {
       home:FutureBuilder(
         future: Get_user(),
         builder: (context,snapshot){
-          if (!snapshot.hasData) {
-            return show_progress_indicator();
-          }
-          print(snapshot.data);
           return snapshot.data==null ? Login():home();
 
         },

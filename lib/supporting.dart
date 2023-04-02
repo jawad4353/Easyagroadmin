@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -221,6 +222,19 @@ class show_progress_indicator extends StatelessWidget{
 
 
 
+
+void Set_windowsize(height,width){
+  var win=appWindow;
+  doWhenWindowReady(() {
+    win = appWindow;
+    var initialSize = Size(height, width);
+    win.minSize = initialSize;
+    win.size = initialSize;
+    win.alignment = Alignment.center;
+    win.title = "Custom window with Flutter";
+    win.show();
+  });
+}
 
 
 
