@@ -8,12 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart';
 import 'login.dart';
 
 class Otp_verify extends StatefulWidget{
-  var OTP,email;
-  Otp_verify({required this.OTP,required this.email});
+  var OTP,email,keep_login;
+  Otp_verify({required this.OTP,required this.email,required this.keep_login});
   @override
   State<Otp_verify> createState() => _Otp_verifyState();
 }
@@ -70,14 +71,22 @@ class _Otp_verifyState extends State<Otp_verify> {
                 SizedBox(
                     width: double.infinity,
                     height: 38,
-                    child: ElevatedButton(onPressed: (){
+                    child: ElevatedButton(onPressed: () async {
                       if(OTP_controller.text.isEmpty){
                         EasyLoading.showInfo('Enter SMS code (OTP) set to ${widget.email}');
                         return;
                       }
                       if(OTP_controller.text==widget.OTP){
+                        if(widget.keep_login==true){
+                          SharedPreferences pref =await SharedPreferences.getInstance();
+                          await pref.setString("email", "${widget.email}");
+                        }
                         EasyLoading.showSuccess('Login Sucessful');
                         Navigator.pushReplacement(context,Myroute(home()) );
+                        return;
+                      }
+                      else{
+                        EasyLoading.showError('Incorrect OTP');
                         return;
                       }
                     }, child: Text('Verify')))

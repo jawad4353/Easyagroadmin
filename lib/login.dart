@@ -26,7 +26,11 @@ class _LoginState extends State<Login> {
   TextEditingController email=new TextEditingController();
 
   TextEditingController password=new TextEditingController();
-  var hidepassword=true,Email_error='',Email_Error_color=Colors.grey,Password_error='',Password_error_color=Colors.grey;
+  var hidepassword=true,Email_error='',
+      Email_Error_color=Colors.grey,
+      Password_error='',
+      Password_error_color=Colors.grey,
+  keep_login=false;
 
   @override
   void initState() {
@@ -161,16 +165,26 @@ class _LoginState extends State<Login> {
                       ),
                     ),
 
+                   Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                  Row(children: [
+                    Checkbox(value: keep_login, onChanged: (a){setState(() {
+                      keep_login=a!;
+                    });}),
+                    Text('Keep Login')
+                  ],),
 
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.push(context, Myroute(Forgotpassword (OTP:Generate_OTP())));
-                        },
-                        child: Text('Forgot Password?'),
-                      ),
-                    ),
+                      TextButton(
+                         onPressed: () {
+                           Navigator.push(context, Myroute(Forgotpassword (OTP:Generate_OTP())));
+                         },
+                         child: Text('Forgot Password?'),
+                       ),
+
+                   ],),
+
+
                     Text(''),
                     SizedBox(
                       width: double.infinity,
@@ -205,7 +219,8 @@ class _LoginState extends State<Login> {
                           else{
                            var OTP= Generate_OTP();
                             // Send_mail(result,OTP,email.text);
-                          Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,)));
+                           print(OTP);
+                          Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,keep_login:keep_login)));
                           EasyLoading.dismiss();
                             return;
                           }

@@ -1,10 +1,15 @@
 
 
+import 'dart:async';
+
+import 'package:easyagroadmin/supporting.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
+import 'home.dart';
 import 'login.dart';
 import 'dart:ui';
 
@@ -22,12 +27,19 @@ Firestore.initialize(projectId);
   final screenSize = window.physicalSize / window.devicePixelRatio;
   setWindowFrame(Rect.fromLTRB(0,0,screenSize.width*1.13,screenSize.height*1.15));
   setWindowMinSize(Size(screenSize.width*1.13 ,screenSize.height*1.15));
-  runApp(const MyApp());
+  runApp(MyApp());
 
 }
 
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+
+  Get_user() async {
+    SharedPreferences pref =await SharedPreferences.getInstance();
+    return await pref.getString("email");
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +47,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home:  Login(),
+      home:FutureBuilder(
+        future: Get_user(),
+        builder: (context,snapshot){
+          if (!snapshot.hasData) {
+            return show_progress_indicator();
+          }
+          print(snapshot.data);
+          return snapshot.data==null ? Login():home();
+
+        },
+      ) ,
       builder: EasyLoading.init(),
     );
   }

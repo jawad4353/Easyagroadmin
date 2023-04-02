@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -188,6 +189,33 @@ jd(){
 
 
 
+
+class show_progress_indicator extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return
+      Center(child: Container(
+        color: Colors.white,
+        child: SpinKitFoldingCube(
+          size: 50.0,
+          duration: Duration(milliseconds: 700),
+          itemBuilder: ((context, index) {
+            var Mycolors=[Colors.green.shade700,Colors.white];
+            var Mycol=Mycolors[index%Mycolors.length];
+            return DecoratedBox(decoration: BoxDecoration(
+                color: Mycol,
+                border: Border.all(color: Colors.green,)
+
+            ));
+          }),
+        ),
+      ),
+
+      );
+
+  }
+
+}
 
 
 
