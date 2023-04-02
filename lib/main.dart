@@ -1,8 +1,8 @@
 
 
 import 'dart:async';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:easyagroadmin/supporting.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -27,7 +27,7 @@ Firestore.initialize(projectId);
   var win=appWindow;
   doWhenWindowReady(() {
     win = appWindow;
-    var initialSize = Size(800, 800);
+    var initialSize = Size(1300, 800);
     win.minSize = initialSize;
 
     win.size = initialSize;

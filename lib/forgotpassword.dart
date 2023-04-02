@@ -47,8 +47,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
               appWindow.maximizeOrRestore();
 
             }
-            print(appWindow.size.height);
-            if(appWindow.size.height==800.0){
+            if(appWindow.size.height<size.height){
               appWindow.maximize();
 
             }

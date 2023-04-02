@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
 
             }
 
-            if(appWindow.size.height==800.0){
+            if(appWindow.size.height<size.height){
               appWindow.maximize();
 
             }

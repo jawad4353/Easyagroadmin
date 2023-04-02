@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
+import 'homescreens/dashboard.dart';
+
 class home extends StatefulWidget{
   @override
   State<home> createState() => _homeState();
@@ -26,13 +28,9 @@ class _homeState extends State<home> {
      backgroundColor: Colors.white,
      appBar: AppBar(
        elevation: 0,
+       centerTitle: true,
        toolbarHeight: 30,
-
        backgroundColor: Colors.white,
-       leading: IconButton(onPressed: (){
-         _scaffoldKey.currentState!.openDrawer();
-       },icon: Icon(Icons.sort,color: Colors.grey,),),
-
        actions: [
          TextButton(onPressed: (){
            appWindow.minimize();
@@ -44,7 +42,7 @@ class _homeState extends State<home> {
 
            }
 
-           if(appWindow.size.height==800.0){
+           if(appWindow.size.height<size.height){
              appWindow.maximize();
 
            }
@@ -55,19 +53,74 @@ class _homeState extends State<home> {
          }, icon: Icon(Icons.close,color: Colors.grey,size: 20,)),
 
        ],),
-     drawer: Drawer(
-       elevation: 0,
-       backgroundColor: Colors.white,
-       shadowColor: Colors.white,
-       width: 200,
-       child: Column(children: [
-         ElevatedButton(onPressed: () async {
-           SharedPreferences pref =await SharedPreferences.getInstance();
-          pref.clear();
-         }, child: Text('clear'))
-       ],),
-     ),
-     body: Center(child: Text(' Admin Home')),
+
+     body: Row(children: [
+       Expanded(
+         flex: 1,
+           child:ListView(children: [
+           Column(
+             crossAxisAlignment: CrossAxisAlignment.center,
+             children: [
+             Image.asset('images/appicon.png',height: 60,),
+             Text('E A S Y A G R O',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16),),
+           ],),
+           // Divider(),
+          SizedBox(height: 13,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+            ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.white,
+                elevation: 0
+            ), icon: Icon(Icons.dashboard,color: Colors.green.shade700,),
+                label: Text('Dashboard',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+
+              , SizedBox(height: 4,),
+              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 0
+              ), icon: Icon(Icons.favorite_border,color: Colors.green.shade700,),
+                  label: Text('Orders',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+,                 SizedBox(height: 4,),
+              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 0
+              ), icon: Icon(Icons.house_siding_sharp,color: Colors.green.shade700,),
+                  label: Text('Companies',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+,
+              SizedBox(height: 4,),
+              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 0
+              ), icon: Icon(Icons.perm_contact_cal,color: Colors.green.shade700,),
+                  label: Text('Dealers',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16)))
+,
+              SizedBox(height: 4,),
+              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.green,
+
+                  elevation: 0
+              ), icon: Icon(Icons.accessibility_new_sharp,color: Colors.green.shade700,),
+                  label: Text('Farmers',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+
+              , SizedBox(height: 4,),
+              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  elevation: 0
+              ), icon: Icon(Icons.logout,color: Colors.green.shade700,),
+                  label: Text('Logout',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+
+            ],)
+           ],)),
+       VerticalDivider(),
+
+       Expanded(
+           flex: 8,
+           child: Dashboard()),
+
+     ],),
+
    );
   }
 }

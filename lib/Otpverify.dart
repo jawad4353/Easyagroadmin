@@ -47,8 +47,7 @@ class _Otp_verifyState extends State<Otp_verify> {
               appWindow.maximizeOrRestore();
 
             }
-            print(appWindow.size.height);
-            if(appWindow.size.height==800.0){
+            if(appWindow.size.height<size.height){
               appWindow.maximize();
 
             }
