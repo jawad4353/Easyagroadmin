@@ -69,4 +69,15 @@ class Database{
     }
   }
 
+
+
+
+   checkIfEmailExists(String email) async {
+    final result = await Firestore.instance
+        .collection('admin')
+        .where('email', isEqualTo: email).limit(1).get();
+     print(result);
+  }
+
+
 }

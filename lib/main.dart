@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -14,6 +15,7 @@ import 'dart:ui';
 
 
 
+
 final  apiKey= "AIzaSyD1dC0Mx7EjQNYD1wWsamjJV9PAenH6bfQ";
 final   projectId= "easyagro-ed808";
 
@@ -21,6 +23,12 @@ final   projectId= "easyagro-ed808";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 Firestore.initialize(projectId);
+
+
+
+
+
+
   final window = WidgetsBinding.instance.window;
   final screenSize = window.physicalSize / window.devicePixelRatio;
   setWindowTitle('EasyAgro');

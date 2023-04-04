@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
+import 'homescreens/addadmin.dart';
 import 'homescreens/dashboard.dart';
 
 class home extends StatefulWidget{
@@ -18,6 +19,8 @@ class home extends StatefulWidget{
 
 class _homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  var screens=[Dashboard(),RegistrationForm()],index=0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +34,13 @@ class _homeState extends State<home> {
        centerTitle: true,
        toolbarHeight: 30,
        backgroundColor: Colors.white,
+       leadingWidth: 110,
+       leading:   Row(
+         mainAxisAlignment: MainAxisAlignment.center,
+         children: [
+           Image.asset('images/appicona.png',height: 50,),
+           Text('  EasyAgro',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.normal,fontSize: 14),),
+         ],),
        actions: [
          TextButton(onPressed: (){
            appWindow.minimize();
@@ -57,67 +67,98 @@ class _homeState extends State<home> {
      body: Row(children: [
        Expanded(
          flex: 1,
-           child:ListView(children: [
-           Column(
-             crossAxisAlignment: CrossAxisAlignment.center,
-             children: [
-             Image.asset('images/appicon.png',height: 60,),
-             Text('E A S Y A G R O',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500,fontSize: 16),),
-           ],),
-           // Divider(),
+           child:Container(
+             color: Colors.lightGreen.shade700,
+             child: ListView(
+               children: [
+
+             // Divider(),
           SizedBox(height: 13,),
+          Container(
+              clipBehavior: Clip.antiAlias,
+              height: 110,decoration: BoxDecoration(
+              color: Colors.black12,
+              shape: BoxShape.circle
+          ),),
+          Column(children: [
+              SizedBox(height: 4,),
+              Text('Jawad Aslam',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: 'jd',
+              color: Colors.white),),
+              Text('Admin',style: TextStyle(color: Colors.white),),
+          ],),
+          Divider(),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.white,
-                elevation: 0
-            ), icon: Icon(Icons.dashboard,color: Colors.green.shade700,),
-                label: Text('Dashboard',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              , SizedBox(height: 4,),
-              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 0
-              ), icon: Icon(Icons.favorite_border,color: Colors.green.shade700,),
-                  label: Text('Orders',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
-,                 SizedBox(height: 4,),
-              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 0
-              ), icon: Icon(Icons.house_siding_sharp,color: Colors.green.shade700,),
-                  label: Text('Companies',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+              ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                 backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                elevation: MaterialStateProperty.resolveWith((states) => 0),
+                overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+              ), icon: Icon(Icons.dashboard,color: Colors.white,),
+                  label: Text('Dashboard',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
+
+                , SizedBox(height: 6,),
+                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.favorite_border,color: Colors.white,),
+                    label: Text('Orders',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
+,                 SizedBox(height: 6,),
+
+
+                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.house_siding_sharp,color: Colors.white,),
+                    label: Text('Companies',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 ,
-              SizedBox(height: 4,),
-              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 0
-              ), icon: Icon(Icons.perm_contact_cal,color: Colors.green.shade700,),
-                  label: Text('Dealers',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16)))
+                SizedBox(height: 6,),
+                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.perm_contact_cal,color:Colors.white,),
+                    label: Text('Dealers',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16)))
 ,
-              SizedBox(height: 4,),
-              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  shadowColor: Colors.green,
+                SizedBox(height: 6,),
+                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) =>Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.accessibility_new_sharp,color: Colors.white,),
+                    label: Text('Farmers',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
-                  elevation: 0
-              ), icon: Icon(Icons.accessibility_new_sharp,color: Colors.green.shade700,),
-                  label: Text('Farmers',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+                , SizedBox(height: 6,),
+                ElevatedButton.icon(onPressed: (){
+                  setState(() {
+                    index=1;
+                  });
+                },style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.add,color: Colors.white,),
+                    label: Text('Add Admin',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
-              , SizedBox(height: 4,),
-              ElevatedButton.icon(onPressed: (){},style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  elevation: 0
-              ), icon: Icon(Icons.logout,color: Colors.green.shade700,),
-                  label: Text('Logout',style: TextStyle(color: Colors.black,fontWeight: FontWeight.normal,fontSize: 16),))
+                , SizedBox(height: 6,),
+                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
+                ), icon: Icon(Icons.logout,color: Colors.white,),
+                    label: Text('Logout',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
-            ],)
-           ],)),
+              ],)
+             ],),
+           )),
+       if(index!=1)
        VerticalDivider(),
-
        Expanded(
            flex: 8,
-           child: Dashboard()),
+           child: screens[index]),
 
      ],),
 
