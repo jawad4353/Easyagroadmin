@@ -3,6 +3,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart' as path;
 
 class Database{
 
@@ -72,12 +76,27 @@ class Database{
 
 
 
-   checkIfEmailExists(String email) async {
-    final result = await Firestore.instance
-        .collection('admin')
-        .where('email', isEqualTo: email).limit(1).get();
-     print(result);
+
+
+ uploadImage(File imageFile) async {
+    try {
+      final response = await http.post(Uri.parse(
+          'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o?uploadType=media&name=admin/${path.basename(imageFile.path)}'),
+          body: imageFile.readAsBytesSync());
+      if (response.statusCode == 200) {
+        final downloadUrl = jsonDecode(response.body);
+        return downloadUrl;
+      } else {
+        print('Error uploading image: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+      return null;
+    }
   }
+
+
 
 
 }

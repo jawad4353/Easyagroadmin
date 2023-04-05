@@ -191,20 +191,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
                      EasyLoading.showInfo('Upload Profile Picture !');
                      return;
                    }
-                  var email_exists= new Database().checkIfEmailExists(email_controller.text);
+                   final result = await Firestore.instance.collection('admin').document('${email_controller.text}').get();
+
                   try{
 
-                    final storageRef = FirebaseStorage.instance.ref().child('admin').child('${email_controller.text}.png');
-                    var result= await storageRef.putFile(_image);
+                    final file = File(_image.path);
+                    final imageUrl = await new Database().uploadImage(file);
+                    if(imageUrl!=null){
+                       final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${imageUrl['name']}?alt=media&token=${imageUrl['downloadTokens']}';
+                      await Firestore.instance.collection('admin').document('${email_controller.text}').set({
+                        'name': name_controller.text,
+                        'email': email_controller.text,
+                        'password': password_controller.text,
+                        'image': '$downloadUrl',
+                        'contact': contact_controller.text,
+                      });
+                    }
 
-                    final downloadUrl = await storageRef.getDownloadURL();
-                    await Firestore.instance.collection('admin').add({
-                      'name': name_controller.text,
-                      'email': email_controller.text,
-                      'password': password_controller.text,
-                      'image': 'no',
-                      'contact': contact_controller.text,
-                    });
                   }
                    catch(e){
                      EasyLoading.showError('Error Adding Admin ${e}');

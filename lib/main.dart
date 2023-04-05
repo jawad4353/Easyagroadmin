@@ -23,6 +23,12 @@ final   projectId= "easyagro-ed808";
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 Firestore.initialize(projectId);
+// Firebase.initializeApp(options: FirebaseOptions(
+//     apiKey:"AIzaSyDtXYijb9Bwbf24hZZennLwMrIqGIYVRqs",
+//     appId: '1:730243418927:web:88a00c295cdcf9ec5cefda',
+//     messagingSenderId:'730243418927',
+//     projectId: "easyagro-ed808"
+// ));
 
 
 
