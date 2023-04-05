@@ -16,7 +16,7 @@ void Customize_Easyloading(){
     ..indicatorSize = 45.0
     ..radius = 10.0
     ..progressColor = Colors.white
-    ..backgroundColor =  Colors.green.shade700
+    ..backgroundColor =  Colors.lightGreen.shade700
     ..indicatorColor = Colors.white
     ..textColor = Colors.white
     ..maskColor = Colors.blue.withOpacity(0.5)
@@ -60,7 +60,7 @@ List Email_Validation(a){
   }
 
   mylist.add('Valid Email');
-  mylist.add(Colors.green);
+  mylist.add(Colors.lightGreen);
   return mylist;
 
 
@@ -88,7 +88,7 @@ List Password_Validation(a){
   }
 
   mylist.add('Valid Password');
-  mylist.add(Colors.green);
+  mylist.add(Colors.lightGreen);
   return mylist;
 
 
@@ -196,16 +196,16 @@ class show_progress_indicator extends StatelessWidget{
   Widget build(BuildContext context) {
     return
       Center(child: Container(
-        color: Colors.white,
+        color: Colors.transparent,
         child: SpinKitFoldingCube(
           size: 50.0,
           duration: Duration(milliseconds: 700),
           itemBuilder: ((context, index) {
-            var Mycolors=[Colors.green.shade700,Colors.white];
+            var Mycolors=[Colors.lightGreen.shade700,Colors.white];
             var Mycol=Mycolors[index%Mycolors.length];
             return DecoratedBox(decoration: BoxDecoration(
                 color: Mycol,
-                border: Border.all(color: Colors.green,)
+                border: Border.all(color: Colors.lightGreen.shade700,)
 
             ));
           }),
@@ -235,6 +235,7 @@ void Set_windowsize(height,width){
     win.show();
   });
 }
+
 
 
 

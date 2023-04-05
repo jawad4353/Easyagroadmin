@@ -8,6 +8,7 @@ import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../database.dart';
 
@@ -32,220 +33,276 @@ class _RegistrationFormState extends State<RegistrationForm> {
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.lightGreen.shade700,
+      backgroundColor:  Colors.white,
       appBar: AppBar(
-        title:  Text('Register Admin'),
+        title:  Text('Admins',style: TextStyle(color: Colors.black),),
         centerTitle: true,
-        backgroundColor: Colors.lightGreen.shade700,
+        backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body:  Center(
-          child: Container(
-            width: size.width*0.27,
-            padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18)
+      body:  Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              height: size.height,
+              width: size.width*0.5,
+
+              child: StreamBuilder(
+                stream: Firestore.instance.collection('admin').orderBy('name').get().asStream(),
+                  builder: (context,snap){
+                if(!snap.hasData){
+                  return show_progress_indicator();
+                }
+                var data=snap.data!.asMap();
+                return ListView.builder(
+                  itemCount: data.length,
+                    itemBuilder:(context,index){
+                  return ListTile(
+                    isThreeLine: true,
+                    title:Text('${data[index]!['name']}'),
+                    subtitle: Text('${data[index]!['email']}\n${data[index]!['contact']}') ,
+                    leading:  Image.network('${ data[index]!['image']}',width: 90,fit: BoxFit.fill,),
+                    trailing:Wrap(children: [
+                      IconButton(onPressed: (){},icon: Icon(Icons.update),),
+                      IconButton(onPressed: () async {
+                        SharedPreferences pref =await SharedPreferences.getInstance();
+                       var current_email= await pref.getString("email");
+                       if(current_email!=data[index]!['email'])
+                         {
+                        try{
+                          new Database().deleteImage(data[index]!['image']);
+                          await Firestore.instance.collection('admin').document('${data[index]!['email']}').delete();
+                          EasyLoading.showSuccess('Deleted');
+                          setState(() {
+
+                          });
+                        }
+                        catch(e){
+                          EasyLoading.showError(' Error Deleting Image $e');
+                          return;
+                        }
+                      }
+                       else{
+                         EasyLoading.showError('You cannot delete your Account !');
+                         return;
+                       }
+                       },icon: Icon(Icons.delete),),
+                    ],) ,
+                  );
+                    }
+                    );
+              }),
             ),
-            child: Column(
-               mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: size.width*0.26,
-                      height: 200,
-                      color: Colors.black12,
-                      child: GestureDetector(
-                        onTap: () async {
-                          FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(type: FileType.image);
+            SizedBox(width: 6,),
+            Container(
+              width: size.width*0.27,
+              padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(18)
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
 
-                          if (result != null) {
-                            setState(() {
-                              _image = File(result.files.single.path!);
-                            });
-                          }
-                        },
-                        child: _image != null
-                            ? Image.file(_image!, fit: BoxFit.cover)
-                            : Icon(Icons.add_a_photo,size: 56,),
-                      ),
+                children: [
+                  Container(
+                    width: size.width*0.26,
+                    height: 200,
+                    color: Colors.black12,
+                    child: GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(type: FileType.image);
+
+                        if (result != null) {
+                          setState(() {
+                            _image = File(result.files.single.path!);
+                          });
+                        }
+                      },
+                      child: _image != null
+                          ? Image.file(_image!, fit: BoxFit.cover)
+                          : Icon(Icons.add_a_photo,size: 56,),
                     ),
+                  ),
 
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: name_controller,
-                      inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z.-. - ]')),],
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: name_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z.-. - ]')),],
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
 
-                        border: OutlineInputBorder(),
-                      ),
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 20),
+                  ),
+                  SizedBox(height: 20),
 
-                    TextFormField(
-                      controller: contact_controller,
-                      inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
-                      decoration:  InputDecoration(
-                        prefixIcon: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
+                  TextFormField(
+                    controller: contact_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
+                    decoration:  InputDecoration(
+                      prefixIcon: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               elevation: 0,
                               shadowColor: Colors.transparent
-                            ),
-                            onPressed: (){
-                          showCountryPicker(
-                            context: context,
-                            showPhoneCode: true,
-                            countryListTheme: CountryListThemeData(
-                                inputDecoration: InputDecoration(
-                                  hintText: 'Search',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  focusedErrorBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green))  ,
-                                  focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)) ,
-                                  enabledBorder:UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)) ,
-                                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                                  border:  UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)),
-                                )
-                            ),// optional. Shows phone code before the country name.
-                            onSelect: (Country country) {
-                              setState(() {
-                                countrycode='+'+country.phoneCode;
-                              });
-                            },
-                          );
+                          ),
+                          onPressed: (){
+                            showCountryPicker(
+                              context: context,
+                              showPhoneCode: true,
+                              countryListTheme: CountryListThemeData(
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'Search',
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    focusedErrorBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green))  ,
+                                    focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)) ,
+                                    enabledBorder:UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)) ,
+                                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                                    border:  UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)),
+                                  )
+                              ),// optional. Shows phone code before the country name.
+                              onSelect: (Country country) {
+                                setState(() {
+                                  countrycode='+'+country.phoneCode;
+                                });
+                              },
+                            );
 
-                        }, child:Text('${countrycode}',style: TextStyle(color: Colors.black),)),
-                        labelText: 'Contact',
-                        border: OutlineInputBorder(),
-                      ),
+                          }, child:Text('${countrycode}',style: TextStyle(color: Colors.black),)),
+                      labelText: 'Contact',
+                      border: OutlineInputBorder(),
                     ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      controller: email_controller,
-                      inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.-.@-@_-_]')),],
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                      ),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: email_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.-.@-@_-_]')),],
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
                     ),
-                     SizedBox(height: 20),
-                    TextFormField(
-                      controller:password_controller ,
-                      keyboardType: TextInputType.visiblePassword,
-                        inputFormatters: [AsciiInputFormatter()],
-                      obscureText: hidepassword,
-                      decoration:  InputDecoration(
-                        labelText: 'Password',
-                        suffixIcon: IconButton(onPressed: (){
-                          setState(() {
-                            hidepassword=!hidepassword;
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller:password_controller ,
+                    keyboardType: TextInputType.visiblePassword,
+                    inputFormatters: [AsciiInputFormatter()],
+                    obscureText: hidepassword,
+                    decoration:  InputDecoration(
+                      labelText: 'Password',
+                      suffixIcon: IconButton(onPressed: (){
+                        setState(() {
+                          hidepassword=!hidepassword;
+                        });
+                      }, icon: Icon(Icons.remove_red_eye)),
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    width: size.width*0.27,
+                    child:ElevatedButton(onPressed: () async {
+                      if(name_controller.text.isEmpty){
+                        EasyLoading.showInfo('Name required');
+                        return;
+                      }
+                      var a=name_controller.text.replaceAll(' ', '');
+                      if(a.length<3){
+                        EasyLoading.showInfo('Name must have three characters');
+                        return;
+                      }
+                      if(contact_controller.text.isEmpty){
+                        EasyLoading.showInfo('Contact required !');
+                        return;
+                      }
+
+                      if(email_controller.text.isEmpty){
+                        EasyLoading.showInfo('Email required');
+                        return;
+                      }
+                      if(password_controller.text.isEmpty){
+                        EasyLoading.showInfo('Password required');
+                        return;
+                      }
+
+                      if(contact_controller.text.length!=10){
+                        EasyLoading.showInfo('Enter 10 digit contact');
+                        return;
+                      }
+                      var s=Email_Validation(email_controller.text);
+                      var s1=Password_Validation(password_controller.text);
+                      if(s[1]==Colors.red){
+                        EasyLoading.showInfo('${s[0]}');
+                        return;
+                      }
+                      if(s1[1]==Colors.red){
+                        EasyLoading.showInfo('${s1[0]}');
+                        return;
+                      }
+                      if(_image==null){
+                        EasyLoading.showInfo('Upload Profile Picture !');
+                        return;
+                      }
+                      EasyLoading.show(status: 'Processing',dismissOnTap: false);
+
+                      final email_exists = await Firestore.instance.collection('admin').document('${email_controller.text}').exists;
+
+                      if(email_exists){
+                        EasyLoading.showInfo('Already Registered Email !');
+                        return;
+                      }
+                      try{
+
+                        final file = File(_image.path);
+                        final imageUrl = await new Database().uploadImage(file,email_controller.text);
+                        if(imageUrl!=null){
+                          var s='${imageUrl['name']}'.replaceAll('@', '%40');
+                          var s1='${s}'.replaceAll('/', '%2F');
+
+                          final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
+                          await Firestore.instance.collection('admin').document('${email_controller.text}').set({
+                            'name': name_controller.text,
+                            'email': email_controller.text,
+                            'password': password_controller.text,
+                            'image': '$downloadUrl',
+                            'contact': countrycode+contact_controller.text,
                           });
-                        }, icon: Icon(Icons.remove_red_eye)),
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-               Container(
-                 width: size.width*0.27,
-                 child:ElevatedButton(onPressed: () async {
-                   if(name_controller.text.isEmpty){
-                     EasyLoading.showInfo('Name required');
-                     return;
-                   }
-                   var a=name_controller.text.replaceAll(' ', '');
-                   if(a.length<3){
-                     EasyLoading.showInfo('Name must have three characters');
-                     return;
-                   }
-                   if(contact_controller.text.isEmpty){
-                     EasyLoading.showInfo('Contact required !');
-                     return;
-                   }
+                        }
+                        EasyLoading.showSuccess('Registered');
 
-                   if(email_controller.text.isEmpty){
-                     EasyLoading.showInfo('Email required');
-                     return;
-                   }
-                   if(password_controller.text.isEmpty){
-                     EasyLoading.showInfo('Password required');
-                     return;
-                   }
+                      }
+                      catch(e){
+                        EasyLoading.showError('Error Adding Admin ${e}');
+                        return;
+                      }
 
-                   if(contact_controller.text.length!=10){
-                     EasyLoading.showInfo('Enter 10 digit contact');
-                     return;
-                   }
-                   var s=Email_Validation(email_controller.text);
-                   var s1=Password_Validation(password_controller.text);
-                   if(s[1]==Colors.red){
-                     EasyLoading.showInfo('${s[0]}');
-                     return;
-                   }
-                   if(s1[1]==Colors.red){
-                     EasyLoading.showInfo('${s1[0]}');
-                     return;
-                   }
-                   if(_image==null){
-                     EasyLoading.showInfo('Upload Profile Picture !');
-                     return;
-                   }
-                   EasyLoading.show(status: 'Processing',dismissOnTap: false);
 
-                   final email_exists = await Firestore.instance.collection('admin').document('${email_controller.text}').exists;
-
-                   if(email_exists){
-                     EasyLoading.showInfo('Already Registered Email !');
-                     return;
-                   }
-                  try{
-
-                    final file = File(_image.path);
-                    final imageUrl = await new Database().uploadImage(file,email_controller.text);
-                    if(imageUrl!=null){
-                      var s='${imageUrl['name']}'.replaceAll('@', '%40');
-                      var s1='${s}'.replaceAll('/', '%2F');
-
-                       final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
-                      await Firestore.instance.collection('admin').document('${email_controller.text}').set({
-                        'name': name_controller.text,
-                        'email': email_controller.text,
-                        'password': password_controller.text,
-                        'image': '$downloadUrl',
-                        'contact': countrycode+contact_controller.text,
+                      setState(() {
+                        email_controller.text='';
+                        contact_controller.text='';
+                        countrycode='+92';
+                        password_controller.text='';
+                        name_controller.text='';
+                        _image=null;
                       });
-                    }
-                    EasyLoading.showSuccess('Registered');
 
-                  }
-                   catch(e){
-                     EasyLoading.showError('Error Adding Admin ${e}');
-                     return;
-                   }
+                      EasyLoading.dismiss();
 
-
-               setState(() {
-                 email_controller.text='';
-                 contact_controller.text='';
-                 countrycode='+92';
-                 password_controller.text='';
-                 name_controller.text='';
-                 _image=null;
-               });
-
-                 EasyLoading.dismiss();
-
-                 },
-                   style: ElevatedButton.styleFrom(
-                     backgroundColor: Colors.lightGreen.shade700
-                   ),
-                   child: Text('Register',),),),
+                    },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightGreen.shade700
+                      ),
+                      child: Text('Register',),),),
 
 
-                  ],
-                ),
-          ),
+                ],
+              ),
+            ),
+          ],
         ),
 
 

@@ -129,7 +129,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
 
                          }
                          EasyLoading.dismiss();
-                      },child: Text('Get Code'),)
+                      },child: Text('Get Code',style: TextStyle(color: Colors.white),),)
                     ),
                   ),
                 if(mail_sent)
@@ -165,7 +165,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         setState(() {
                           hidepassword=!hidepassword;
                         });
-                      },icon: Icon(Icons.remove_red_eye,color: Colors.green,),),
+                      },icon: Icon(Icons.remove_red_eye,color: Colors.lightGreen.shade700,),),
 
                       border: OutlineInputBorder(),
                       focusedErrorBorder:OutlineInputBorder(borderSide: BorderSide(color: Password_error_color))  ,
@@ -212,7 +212,7 @@ class _ForgotpasswordState extends State<Forgotpassword> {
                         }
 
                       },
-                      child: Text('Update'),
+                      child: Text('Update',style: TextStyle(color: Colors.white),),
                     ),
                   ),
 

@@ -121,7 +121,7 @@ class _Otp_verifyState extends State<Otp_verify> {
                         EasyLoading.showError('Incorrect OTP');
                         return;
                       }
-                    }, child: Text('Verify')))
+                    }, child: Text('Verify',style: TextStyle(color: Colors.white),)))
               ],),
             ),
           ),

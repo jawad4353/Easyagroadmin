@@ -13,8 +13,12 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
+import 'homescreens/Companies.dart';
+import 'homescreens/Dealers.dart';
+import 'homescreens/Farmers.dart';
 import 'homescreens/addadmin.dart';
 import 'homescreens/dashboard.dart';
+import 'homescreens/orders.dart';
 import 'login.dart';
 
 class home extends StatefulWidget{
@@ -24,14 +28,17 @@ class home extends StatefulWidget{
 
 class _homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var screens=[Dashboard(),RegistrationForm()],index=0;
+  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm()],index=0;
+  var current_email;
  @override
   void initState() {
-
+    Get_email();
     super.initState();
   }
-  Get_email(){
 
+  Get_email() async {
+    SharedPreferences pref =await SharedPreferences.getInstance();
+   current_email= await pref.getString("email");
   }
 
   @override
@@ -83,13 +90,14 @@ class _homeState extends State<home> {
              color: Colors.lightGreen.shade700,
              child: ListView(
                children: [
+                 SizedBox(height: 5,),
                  Container(
                    height: 200,
                    child: StreamBuilder(
-                     stream: Firestore.instance.collection('admin').document('ja883526@gmail.com').stream,
+                     stream: Firestore.instance.collection('admin').document('${current_email}').stream,
                      builder: (context,snap){
                        if (!snap.hasData) {
-                         return CircularProgressIndicator();
+                         return show_progress_indicator();
                        }
 
 
@@ -121,7 +129,11 @@ class _homeState extends State<home> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
-              ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+              ElevatedButton.icon(onPressed: (){
+                setState(() {
+                  index=0;
+                });
+              },style:ButtonStyle(
                  backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                 elevation: MaterialStateProperty.resolveWith((states) => 0),
                 overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
@@ -129,7 +141,11 @@ class _homeState extends State<home> {
                   label: Text('Dashboard',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
                 , SizedBox(height: 6,),
-                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                ElevatedButton.icon(onPressed: (){
+                  setState(() {
+                    index=1;
+                  });
+                },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
@@ -138,7 +154,11 @@ class _homeState extends State<home> {
 ,                 SizedBox(height: 6,),
 
 
-                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                ElevatedButton.icon(onPressed: (){
+                  setState(() {
+                    index=2;
+                  });
+                },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
@@ -146,7 +166,11 @@ class _homeState extends State<home> {
                     label: Text('Companies',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 ,
                 SizedBox(height: 6,),
-                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                ElevatedButton.icon(onPressed: (){
+                  setState(() {
+                    index=3;
+                  });
+                },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
@@ -154,7 +178,11 @@ class _homeState extends State<home> {
                     label: Text('Dealers',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16)))
 ,
                 SizedBox(height: 6,),
-                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                ElevatedButton.icon(onPressed: (){
+                  setState(() {
+                    index=4;
+                  });
+                },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) =>Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
@@ -164,7 +192,7 @@ class _homeState extends State<home> {
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=1;
+                    index=5;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -211,8 +239,7 @@ class _homeState extends State<home> {
               ],)
              ],),
            )),
-       if(index!=1)
-       VerticalDivider(),
+
        Expanded(
            flex: 8,
            child: screens[index]),

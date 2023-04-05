@@ -33,6 +33,11 @@ class _LoginState extends State<Login> {
   keep_login=false;
 
 
+  @override
+  void initState() {
+    Customize_Easyloading();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,19 +77,19 @@ class _LoginState extends State<Login> {
       ],),
       body:  Container(
           decoration: BoxDecoration(
-            color: Colors.green,
+            color: Colors.lightGreen.shade700,
             image: DecorationImage(
               image: Image.asset('images/backk.jpg').image,
               fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.4),
+                  Colors.black.withOpacity(0.6),
                   BlendMode.dstATop,
                 )
             ),
           ),
           child: Center(
             child: Padding(
-              padding: EdgeInsets.only(top:size.height*0.15 ,bottom:size.height*0.15,left: 40,right: 40 ),
+              padding: EdgeInsets.only(top:size.height*0.13 ,bottom:size.height*0.13,left: 40,right: 40 ),
               child: Container(
                 padding: EdgeInsets.only(left: 30,right: 30,bottom: 10,top: 10),
                 width: 410,
@@ -181,7 +186,7 @@ class _LoginState extends State<Login> {
                           setState(() {
                             hidepassword=!hidepassword;
                           });
-                        },icon: Icon(Icons.remove_red_eye,color: Colors.green,),),
+                        },icon: Icon(Icons.remove_red_eye,color: Colors.lightGreen,),),
                         errorText: Password_error,
                         hoverColor: Password_error_color,
                         focusColor: Password_error_color,
@@ -240,22 +245,29 @@ class _LoginState extends State<Login> {
                             EasyLoading.showInfo('Password ${s1[0]}');
                             return;
                           }
-                          var result=await new Database().Admin_Login(email.text,password.text);
-                          if(result==''){
-                            EasyLoading.showError('Incorrect Email or Password !');
-                            return;
+                          try{
+                            var result=await new Database().Admin_Login(email.text,password.text);
+                            if(result==''){
+                              EasyLoading.showError('Incorrect Email or Password !');
+                              return;
+                            }
+                            else{
+                              var OTP= Generate_OTP();
+                              Send_mail(result,OTP,email.text);
+                              print(OTP);
+                              Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,keep_login:keep_login)));
+                              EasyLoading.dismiss();
+                              return;
+                            }
                           }
-                          else{
-                           var OTP= Generate_OTP();
-                            Send_mail(result,OTP,email.text);
-                           print(OTP);
-                          Navigator.pushReplacement(context, Myroute(  Otp_verify(OTP:OTP,email: email.text,keep_login:keep_login)));
-                          EasyLoading.dismiss();
-                            return;
+                          catch(e){
+                            EasyLoading.showInfo('Error Logging in');
                           }
+                          
+                         
 
                         },
-                        child: Text('Login'),
+                        child: Text('Login',style: TextStyle(color: Colors.white,fontSize: 17),),
                       ),
                     ),
 

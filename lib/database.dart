@@ -98,6 +98,18 @@ class Database{
     }
   }
 
+  Future<void> deleteImage(url) async {
+
+  try{
+    final response = await http.delete(Uri.parse(url));
+  }
+  catch(e){
+    print('error $e');
+  }
+
+  }
+
+
 
 
 
