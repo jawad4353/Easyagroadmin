@@ -4,7 +4,9 @@
 
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easyagroadmin/supporting.dart';
+import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -23,7 +25,14 @@ class home extends StatefulWidget{
 class _homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var screens=[Dashboard(),RegistrationForm()],index=0;
+ @override
+  void initState() {
 
+    super.initState();
+  }
+  Get_email(){
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,22 +83,39 @@ class _homeState extends State<home> {
              color: Colors.lightGreen.shade700,
              child: ListView(
                children: [
+                 Container(
+                   height: 200,
+                   child: StreamBuilder(
+                     stream: Firestore.instance.collection('admin').document('ja883526@gmail.com').stream,
+                     builder: (context,snap){
+                       if (!snap.hasData) {
+                         return CircularProgressIndicator();
+                       }
 
-             // Divider(),
-          SizedBox(height: 13,),
-          Container(
-              clipBehavior: Clip.antiAlias,
-           child: Image.network('https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/adminimages%2Fja8835265%40gmail.com?alt=media&token=ff7970d3-5ca4-4251-9a14-3b43441c8b87'),
-              height: 110,decoration: BoxDecoration(
-              color: Colors.black12,
-              shape: BoxShape.circle
-          ),),
-          Column(children: [
-              SizedBox(height: 4,),
-              Text('Jawad Aslam',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: 'jd',
-              color: Colors.white),),
-              Text('Admin',style: TextStyle(color: Colors.white),),
-          ],),
+
+                       return ListView(children: [
+                         Container(
+                           clipBehavior: Clip.antiAlias,
+                           child: Image.network('${snap.data!.map['image']}',fit: BoxFit.cover,),
+                           height: 110,decoration: BoxDecoration(
+                             color: Colors.black12,
+                             shape: BoxShape.circle
+                         ),),
+                         SizedBox(height: 13,),
+
+                         Column(children: [
+                           SizedBox(height: 4,),
+                           Text('${snap.data!.map['name']}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,fontFamily: 'jd',
+                               color: Colors.white),),
+
+                           Text('${snap.data!.map['contact']}',style: TextStyle(color: Colors.white),),
+                           Text('Admin',style: TextStyle(color: Colors.white),),
+                         ],),
+                       ],);
+                     },
+                   ),
+                 ),
+
           Divider(),
           Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -32,11 +32,7 @@ class _LoginState extends State<Login> {
       Password_error_color=Colors.grey,
   keep_login=false;
 
-  @override
-  void initState() {
-    Customize_Easyloading();
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {

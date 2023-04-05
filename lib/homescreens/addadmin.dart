@@ -206,7 +206,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     if(imageUrl!=null){
                       var s='${imageUrl['name']}'.replaceAll('@', '%40');
                       var s1='${s}'.replaceAll('/', '%2F');
-                      print(s1);
+
                        final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
                       await Firestore.instance.collection('admin').document('${email_controller.text}').set({
                         'name': name_controller.text,
@@ -225,6 +225,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                    }
 
 
+               setState(() {
+                 email_controller.text='';
+                 contact_controller.text='';
+                 countrycode='+92';
+                 password_controller.text='';
+                 name_controller.text='';
+                 _image=null;
+               });
 
                  EasyLoading.dismiss();
 
@@ -232,7 +240,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                    style: ElevatedButton.styleFrom(
                      backgroundColor: Colors.lightGreen.shade700
                    ),
-                   child: Text('Register',),),)
+                   child: Text('Register',),),),
+
+
                   ],
                 ),
           ),
