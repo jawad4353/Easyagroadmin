@@ -191,33 +191,42 @@ class _RegistrationFormState extends State<RegistrationForm> {
                      EasyLoading.showInfo('Upload Profile Picture !');
                      return;
                    }
-                   final result = await Firestore.instance.collection('admin').document('${email_controller.text}').get();
+                   EasyLoading.show(status: 'Processing',dismissOnTap: false);
 
+                   final email_exists = await Firestore.instance.collection('admin').document('${email_controller.text}').exists;
+
+                   if(email_exists){
+                     EasyLoading.showInfo('Already Registered Email !');
+                     return;
+                   }
                   try{
 
                     final file = File(_image.path);
-                    final imageUrl = await new Database().uploadImage(file);
+                    final imageUrl = await new Database().uploadImage(file,email_controller.text);
                     if(imageUrl!=null){
-                       final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${imageUrl['name']}?alt=media&token=${imageUrl['downloadTokens']}';
+                      var s='${imageUrl['name']}'.replaceAll('@', '%40');
+                      var s1='${s}'.replaceAll('/', '%2F');
+                      print(s1);
+                       final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
                       await Firestore.instance.collection('admin').document('${email_controller.text}').set({
                         'name': name_controller.text,
                         'email': email_controller.text,
                         'password': password_controller.text,
                         'image': '$downloadUrl',
-                        'contact': contact_controller.text,
+                        'contact': countrycode+contact_controller.text,
                       });
                     }
+                    EasyLoading.showSuccess('Registered');
 
                   }
                    catch(e){
                      EasyLoading.showError('Error Adding Admin ${e}');
-                     print(e);
                      return;
                    }
 
 
 
-
+                 EasyLoading.dismiss();
 
                  },
                    style: ElevatedButton.styleFrom(

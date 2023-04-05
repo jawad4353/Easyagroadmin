@@ -78,11 +78,13 @@ class Database{
 
 
 
- uploadImage(File imageFile) async {
+ uploadImage(File imageFile,email) async {
     try {
       final response = await http.post(Uri.parse(
-          'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o?uploadType=media&name=admin/${path.basename(imageFile.path)}'),
-          body: imageFile.readAsBytesSync());
+          'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o?uploadType=media&name=adminimages/$email'),
+          body: await imageFile.readAsBytesSync(), headers: {
+          'Content-Type': '.png',
+        },);
       if (response.statusCode == 200) {
         final downloadUrl = jsonDecode(response.body);
         return downloadUrl;

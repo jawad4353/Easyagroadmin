@@ -4,13 +4,16 @@
 
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:easyagroadmin/supporting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
 import 'homescreens/addadmin.dart';
 import 'homescreens/dashboard.dart';
+import 'login.dart';
 
 class home extends StatefulWidget{
   @override
@@ -76,6 +79,7 @@ class _homeState extends State<home> {
           SizedBox(height: 13,),
           Container(
               clipBehavior: Clip.antiAlias,
+           child: Image.network('https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/adminimages%2Fja8835265%40gmail.com?alt=media&token=ff7970d3-5ca4-4251-9a14-3b43441c8b87'),
               height: 110,decoration: BoxDecoration(
               color: Colors.black12,
               shape: BoxShape.circle
@@ -144,7 +148,34 @@ class _homeState extends State<home> {
                     label: Text('Add Admin',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
                 , SizedBox(height: 6,),
-                ElevatedButton.icon(onPressed: (){},style:ButtonStyle(
+                ElevatedButton.icon(onPressed: () async {
+                  SharedPreferences pref =await SharedPreferences.getInstance();
+                  pref.clear();
+                  showDialog(context: context, builder: (context)=>AlertDialog(
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                      Text('Are you sure ?'),
+                      Text('You will be redirected to login page and will be logout ',style: TextStyle(
+                        fontWeight: FontWeight.normal,fontSize: 15
+                      ),),
+                    ],),
+                    actions: [
+                      ElevatedButton(style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.lightGreen.shade700
+                  ),onPressed: (){
+                        EasyLoading.showSuccess('Logout');
+                        Navigator.pushReplacement(context, Myroute(Login()));
+                      }, child: Text('Yes')),
+                      ElevatedButton(style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.lightGreen.shade700
+                      ),onPressed: (){
+                        Navigator.of(context).pop();
+                      }, child: Text('No')),
+                    ],
+                  ));
+
+                },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
