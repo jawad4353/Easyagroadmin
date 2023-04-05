@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -7,6 +9,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 class Database{
 
@@ -99,18 +102,38 @@ class Database{
   }
 
   Future<void> deleteImage(url) async {
-
   try{
     final response = await http.delete(Uri.parse(url));
   }
   catch(e){
     print('error $e');
   }
-
   }
+  
+
+  Check_duplicateEmail(email,id) async {
+
+    var exists=false;
+    var dat=await Firestore.instance.collection('admin').get();
+    var data=dat.asMap().forEach((key, value) {
+             if(value.map['email']==email  &&  value.map['id']!=id ){
+               exists=true;
+             }
+    }) ;
+  return exists;
+    }
 
 
 
+
+
+  String getUniqueProductID() {
+    var uuid = Uuid();
+    var random = Random();
+    String uniqueID = uuid.v4();
+    int randomInt = random.nextInt(100000);
+    return "user-$uniqueID-$randomInt";
+  }
 
 
 }

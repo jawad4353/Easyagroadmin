@@ -102,13 +102,18 @@ class _homeState extends State<home> {
 
 
                        return ListView(children: [
-                         Container(
-                           clipBehavior: Clip.antiAlias,
-                           child: Image.network('${snap.data!.map['image']}',fit: BoxFit.cover,),
-                           height: 110,decoration: BoxDecoration(
-                             color: Colors.black12,
-                             shape: BoxShape.circle
-                         ),),
+                         InkWell(
+                           onTap: (){
+                             Navigator.push(context, Myroute(View_Network_Image(url: snap.data!.map['image'],)));
+                           },
+                           child: Container(
+                             clipBehavior: Clip.antiAlias,
+                             child: Image.network('${snap.data!.map['image']}',fit: BoxFit.cover,),
+                             height: 110,decoration: BoxDecoration(
+                               color: Colors.black12,
+                               shape: BoxShape.circle
+                           ),),
+                         ),
                          SizedBox(height: 13,),
 
                          Column(children: [
@@ -248,4 +253,36 @@ class _homeState extends State<home> {
 
    );
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+class View_Network_Image extends StatelessWidget{
+  var url;
+  View_Network_Image({required this.url});
+  @override
+  Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.lightGreen,
+    appBar: AppBar(elevation: 0,),
+    body: Container(
+
+      child: Center(child: InteractiveViewer(
+          maxScale: 10,
+          minScale: 0.5,
+          child: Image.network('$url'))),
+    ),
+  );
+  }
+
 }
