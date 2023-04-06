@@ -52,6 +52,7 @@ dependencies:
   country_picker: ^2.0.19
   firebase_storage:
   uuid: ^3.0.7
+  select_form_field: ^2.2.0
 
 
 

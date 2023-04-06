@@ -22,13 +22,15 @@ import 'homescreens/orders.dart';
 import 'login.dart';
 
 class home extends StatefulWidget{
+  int index;
+  home({required this.index});
   @override
   State<home> createState() => _homeState();
 }
 
 class _homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm()],index=0;
+  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm()];
   var current_email;
  @override
   void initState() {
@@ -136,7 +138,7 @@ class _homeState extends State<home> {
 
               ElevatedButton.icon(onPressed: (){
                 setState(() {
-                  index=0;
+                  widget.index=0;
                 });
               },style:ButtonStyle(
                  backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -148,7 +150,7 @@ class _homeState extends State<home> {
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=1;
+                    widget.index=1;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -161,7 +163,7 @@ class _homeState extends State<home> {
 
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=2;
+                    widget.index=2;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -173,7 +175,7 @@ class _homeState extends State<home> {
                 SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=3;
+                    widget.index=3;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -185,7 +187,7 @@ class _homeState extends State<home> {
                 SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=4;
+                    widget.index=4;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) =>Colors.lightGreen.shade700),
@@ -197,7 +199,7 @@ class _homeState extends State<home> {
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   setState(() {
-                    index=5;
+                    widget.index=5;
                   });
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -247,7 +249,7 @@ class _homeState extends State<home> {
 
        Expanded(
            flex: 8,
-           child: screens[index]),
+           child: screens[widget.index]),
 
      ],),
 

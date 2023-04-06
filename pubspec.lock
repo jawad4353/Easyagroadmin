@@ -93,10 +93,10 @@ packages:
     dependency: transitive
     description:
       name: cli_util
-      sha256: "66f86e916d285c1a93d3b79587d94bd71984a66aac4ff74e524cfa7877f1395c"
+      sha256: b8db3080e59b2503ca9e7922c3df2072cf13992354d5e944074ffa836fba43b7
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.5"
+    version: "0.4.0"
   clock:
     dependency: transitive
     description:
@@ -433,10 +433,10 @@ packages:
     dependency: "direct main"
     description:
       name: lottie
-      sha256: "14b489bf93af84727a07c87c73580a9413f9cbffa4ea2342f3f71447a674a3fb"
+      sha256: "23522951540d20a57a60202ed7022e6376bed206a4eee1c347a91f58bd57eb9f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   matcher:
     dependency: transitive
     description:
@@ -473,10 +473,10 @@ packages:
     dependency: "direct main"
     description:
       name: msix
-      sha256: "68679afc7d7117467250363dea4fb62db7520a23a9490bf4b65794655235a1d5"
+      sha256: "8cd0a6c6deafac9914cf36e8cd3db76b9e4d2ab7dcb6b71310c92a9a84d920f4"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.1"
+    version: "3.9.2"
   package_config:
     dependency: transitive
     description:
@@ -597,6 +597,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  select_form_field:
+    dependency: "direct main"
+    description:
+      name: select_form_field
+      sha256: "11b2ab3842b9da2a49a7933239c3d428e0cd2d0aa6a70b7e70f370dbf263a751"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   shared_preferences:
     dependency: "direct main"
     description:

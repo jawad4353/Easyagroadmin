@@ -78,7 +78,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
                       },
                       title:Text('${data[index]!['name']}'),
-                      subtitle: Text('${data[index]!['email']}\n${data[index]!['contact']}') ,
+                      subtitle: Text('${data[index]!['email']}\n${data[index]!['countrycode']+data[index]!['contact']}') ,
                       leading:  Image.network('${ data[index]!['image']}',width: 90,fit: BoxFit.fill,),
                       trailing:Wrap(children: [
                         IconButton(onPressed: () async {
@@ -556,7 +556,7 @@ class _Update_adminState extends State<Update_admin> {
                         'countrycode':'${widget.countrycode}'
                       });
                       EasyLoading.showSuccess('Updated');
-                      Navigator.pushReplacement(context, Myroute(home()));
+                      Navigator.pushReplacement(context, Myroute(home(index: 5,)));
                       return ;
                     }
                     final file = File(_image.path);
@@ -566,7 +566,7 @@ class _Update_adminState extends State<Update_admin> {
                       var s1='${s}'.replaceAll('/', '%2F');
 
                       final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
-                      await Firestore.instance.collection('admin').document('${email_controller.text}').set({
+                      await Firestore.instance.collection('admin').document('${email_controller.text}').update({
                         'name': name_controller.text,
                         'email': email_controller.text,
                         'image': '$downloadUrl',
@@ -576,7 +576,7 @@ class _Update_adminState extends State<Update_admin> {
                     }
 
                     EasyLoading.showSuccess('Updated');
-                    Navigator.pushReplacement(context, Myroute(home()));
+                    Navigator.pushReplacement(context, Myroute(home(index: 5,)));
                   }
                   catch(e){
                     EasyLoading.showError('Error Updating Admin ${e}');

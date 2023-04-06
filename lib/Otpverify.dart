@@ -60,12 +60,12 @@ class _Otp_verifyState extends State<Otp_verify> {
         ],),
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.green,
+          color: Colors.lightGreen,
           image: DecorationImage(
               image: Image.asset('images/backk.jpg').image,
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.4),
+                Colors.black.withOpacity(0.5),
                 BlendMode.dstATop,
               )
           ),
@@ -114,7 +114,7 @@ class _Otp_verifyState extends State<Otp_verify> {
                           await pref.setString("email", "${widget.email}");
                         }
                         EasyLoading.showSuccess('Login Sucessful');
-                        Navigator.pushReplacement(context,Myroute(home()) );
+                        Navigator.pushReplacement(context,Myroute(home(index: 0,)) );
                         return;
                       }
                       else{

@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
       home:FutureBuilder(
         future: Get_user(),
         builder: (context,snapshot){
-          return snapshot.data==null ? Login():home();
+          return snapshot.data==null ? Login():home(index: 0,);
 
         },
       ) ,
