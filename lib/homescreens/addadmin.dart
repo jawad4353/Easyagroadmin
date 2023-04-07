@@ -36,8 +36,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return Scaffold(
       backgroundColor:  Colors.white,
       appBar: AppBar(
-        title:  Text('Admins',style: TextStyle(color: Colors.black),),
-        centerTitle: true,
+        title:  Text('Admins',style: TextStyle(color: Colors.black,fontSize: 19,fontWeight: FontWeight.bold),),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -77,19 +76,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
                           countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
                       },
-                      title:Text('${data[index]!['name']}'),
-                      subtitle: Text('${data[index]!['email']}\n${data[index]!['countrycode']+data[index]!['contact']}') ,
+                      title:Text('${data[index]!['name']}',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500),),
+                      subtitle: Text(' ${data[index]!['email']}\n${data[index]!['countrycode']+data[index]!['contact']}'
+                        ,style: TextStyle(fontWeight: FontWeight.w500),) ,
                       leading:  Image.network('${ data[index]!['image']}',width: 90,fit: BoxFit.fill,),
                       trailing:Wrap(children: [
-                        IconButton(onPressed: () async {
+                        ElevatedButton(onPressed: () async {
                           SharedPreferences pref =await SharedPreferences.getInstance();
                           var current_email= await pref.getString("email");
                           Navigator.push(context,
                               Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
                                 contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
                                 countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
-                        },icon: Icon(Icons.update),),
-                        IconButton(onPressed: () async {
+                        },child: Icon(Icons.update,color: Colors.white,),),
+                        Text('  '),
+                        ElevatedButton(onPressed: () async {
                           SharedPreferences pref =await SharedPreferences.getInstance();
                          var current_email= await pref.getString("email");
                          if(current_email!=data[index]!['email'])
@@ -111,7 +112,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                            EasyLoading.showError('You cannot delete your Account !');
                            return;
                          }
-                         },icon: Icon(Icons.delete),),
+                         },child: Icon(Icons.delete,color: Colors.white,),),
                       ],) ,
                     ),
                   );

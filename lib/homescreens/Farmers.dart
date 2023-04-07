@@ -40,7 +40,7 @@ class _FarmersState extends State<Farmers> {
     var size=MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
-     appBar: AppBar(title: Text('  Crops',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500),),backgroundColor: Colors.white,elevation: 0,),
+     appBar: AppBar(title: Text('  Crops',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),backgroundColor: Colors.white,elevation: 0,),
      body:Row(
        mainAxisAlignment: MainAxisAlignment.spaceAround,
        children: [
@@ -82,14 +82,14 @@ class _FarmersState extends State<Farmers> {
 
                                  onTap: () async {
                                  },
-                                 trailing: IconButton(onPressed: (){
+                                 trailing: ElevatedButton(onPressed: (){
                                    Firestore.instance.collection('cropname').document('${data[index]!.id}').delete();
                                    EasyLoading.showSuccess('Deleted');
                                    setState(() {
 
                                    });
-                                 },icon: Icon(Icons.delete),),
-                                 title:  Text('${data[index]!['name']}', style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,color: Colors.black),),
+                                 },child: Icon(Icons.delete,color: Colors.white,),),
+                                 title:  Text('${data[index]!['name']}', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),),
                                  subtitle:   Text('Min : ${data[index]!['minimum']}°C   Max : ${data[index]!['maximum']}°C', style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: Colors.grey),),
 
 
@@ -102,12 +102,12 @@ class _FarmersState extends State<Farmers> {
              ),
            ),
 
-             SizedBox(height: 5,),
-           Text('Fertilizer Quantity ',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500)),
-           SizedBox(height: 5,),
+             Text(''),
+           Text('Fertilizer Quantity ',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold)),
+             Text(''),
            SingleChildScrollView(
              child: Container(
-              height: size.height*0.58,
+              height: size.height*0.56,
                width: size.width*0.6,
 
 
@@ -136,10 +136,16 @@ class _FarmersState extends State<Farmers> {
                                onTap: () async {
                                },
                                 trailing: Wrap(children: [
-                                  IconButton(onPressed: (){}, icon:Icon(Icons.update)),
-                                  IconButton(onPressed: (){}, icon:Icon(Icons.delete)),
+                                  ElevatedButton(onPressed: (){}, child:Icon(Icons.update,color: Colors.white,)),
+                                  Text('  '),
+                                  ElevatedButton(onPressed: (){
+                                    Firestore.instance.collection('crops').document(data[index]!.id).delete();
+                                    setState(() {
+
+                                    });
+                                  }, child:Icon(Icons.delete,color: Colors.white,)),
                                 ],),
-                               title:Text('${name[0]}'),
+                               title:Text('${name[0]}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
                                 subtitle:Wrap(children: [
 
                                   Text('${name[1]} '),
@@ -292,11 +298,11 @@ class _FarmersState extends State<Farmers> {
 
 
 
-                SizedBox(height: 9,),
+                SizedBox(height: 19,),
                 Container(
                    width: 350,
                    padding:  EdgeInsets.only(left: 30,right: 30,top: 20),
-                   height: size.height*0.65,
+                   height: size.height*0.59,
                    decoration: BoxDecoration(
                        border: Border.all(color: Colors.grey),
                        borderRadius: BorderRadius.circular(20)
