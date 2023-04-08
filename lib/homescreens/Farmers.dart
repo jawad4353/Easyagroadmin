@@ -14,7 +14,7 @@ class Farmers extends StatefulWidget{
 }
 
 class _FarmersState extends State<Farmers> {
- var  _selectedSoilType,_selectedcrop_name;
+ var  _selectedSoilType,_selectedcrop_name,trigger=0;
  TextEditingController _soilTypeController=new TextEditingController();
  TextEditingController _crop_Controller=new TextEditingController();
  TextEditingController _Crop_name_Controller=new TextEditingController();
@@ -119,7 +119,7 @@ class _FarmersState extends State<Farmers> {
                      }
                      var data=snap.data!.asMap();
 
-                     return  data.length==0 ? Row(
+                     return  data.length==0 ? Column(
                        mainAxisAlignment: MainAxisAlignment.center,
                        children: [
                          Icon(Icons.no_drinks),
@@ -136,25 +136,37 @@ class _FarmersState extends State<Farmers> {
                                onTap: () async {
                                },
                                 trailing: Wrap(children: [
-                                  ElevatedButton(onPressed: (){}, child:Icon(Icons.update,color: Colors.white,)),
-                                  Text('  '),
                                   ElevatedButton(onPressed: (){
-                                    Firestore.instance.collection('crops').document(data[index]!.id).delete();
                                     setState(() {
 
+                                      _soilTypeController.text=name[0];
+                                      _crop_Controller.text=name[1];
+                                      calcium_Controller.text='${data[index]!['calcium']}';
+                                      nitrogen_Controller.text='${data[index]!['nitrogen']}';
+                                      potassium_Controller.text='${data[index]!['potassium']}';
+                                      phosphorus_Controller.text='${data[index]!['phosphorus']}';
+                                      zinc_Controller.text='${data[index]!['zinc']}';
+                                    });
+                                  }, child:Icon(Icons.update,color: Colors.white,)),
+                                  Text('  '),
+                                  ElevatedButton(onPressed: (){
+                                    EasyLoading.show(status: 'Deleting');
+                                    Firestore.instance.collection('crops').document(data[index]!.id).delete();
+                                    setState(() {
+                                       EasyLoading.dismiss();
                                     });
                                   }, child:Icon(Icons.delete,color: Colors.white,)),
                                 ],),
                                title:Text('${name[0]}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
                                 subtitle:Wrap(children: [
 
-                                  Text('${name[1]} '),
-
-                                  Text('${data[index]!['nitrogen']} N'),
-                                  Text('${data[index]!['calcium']} Ca'),
-                                  Text('${data[index]!['zinc']} Zn'),
-                                  Text('${data[index]!['potassium']} K'),
-                                  Text('${data[index]!['phosphorus']} P'),
+                                  Text('${name[1]} ',style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500),),
+                                  Text('  '),
+                                  Text(data[index]!['nitrogen']==''? '' :' N : ${data[index]!['nitrogen']}  ',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
+                                  Text(data[index]!['calcium']==''? '' :' Ca : ${data[index]!['calcium']}   ',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
+                                  Text(data[index]!['zinc']==''? '' :' Zn : ${data[index]!['zinc']}    ',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
+                                  Text(data[index]!['potassium']==''? '' :' K2O : ${data[index]!['potassium']}   ',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
+                                  Text(data[index]!['phosphorus']==''? '' :'P2O5 : ${data[index]!['phosphorus']}',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w500)),
                                 ],),
 
                            );
@@ -275,16 +287,20 @@ class _FarmersState extends State<Farmers> {
                            EasyLoading.showInfo('Already registered crop.\n${_Crop_name_Controller.text.toLowerCase()}');
                            return;
                          }
-
-                         Firestore.instance.collection('cropname').document('${_Crop_name_Controller.text.toLowerCase()}').set({
-                           'name':'${_Crop_name_Controller.text}',
-                           'minimum':'${from_temp_controller.text}',
-                           'maximum':'${to_temp_controller.text}'
-                         });
+                        try{
+                        await Firestore.instance.collection('cropname').document('${_Crop_name_Controller.text.toLowerCase()}').set({
+                        'name':'${_Crop_name_Controller.text}',
+                        'minimum':'${from_temp_controller.text}',
+                        'maximum':'${to_temp_controller.text}'
+                         }).whenComplete(() =>setState(() {
+                        trigger=5;
+                         }) );
                          EasyLoading.showSuccess('Crop Added');
-                         setState(() {
-
-                         });
+                          }
+                         catch(e){
+                         var s='$e'.split(']');
+                         EasyLoading.showSuccess('Error : ${s[1]}');
+                         }
 
 
 
@@ -426,7 +442,7 @@ class _FarmersState extends State<Farmers> {
                          keyboardType: TextInputType.numberWithOptions(decimal: true),
                        ),
                        SizedBox(height: 9,),
-                       ElevatedButton(onPressed: (){
+                       ElevatedButton(onPressed: () async {
                          if(_soilTypeController.text.isEmpty){
                            EasyLoading.showInfo('Select Soil Type !');
                            return;
@@ -443,19 +459,29 @@ class _FarmersState extends State<Farmers> {
                            return;
                          }
 
-                         Firestore.instance.collection('crops').document('${_soilTypeController.text}+${_crop_Controller.text}').set({
-                           'nitrogen':'${nitrogen_Controller.text}',
-                           'phosphorus':'${phosphorus_Controller.text}',
-                           'potassium':'${potassium_Controller.text}',
-                           'calcium':'${calcium_Controller.text}',
-                           'zinc':'${zinc_Controller.text}',
-                           'cropname':'${_crop_Controller.text.toLowerCase()}'
-                         });
+                         EasyLoading.show(status: 'Processing');
 
-                         EasyLoading.showSuccess('Added');
-                        setState(() {
+                        try{
+                          await Firestore.instance.collection('crops').document('${_soilTypeController.text}+${_crop_Controller.text}').set({
+                            'nitrogen':'${nitrogen_Controller.text}',
+                            'phosphorus':'${phosphorus_Controller.text}',
+                            'potassium':'${potassium_Controller.text}',
+                            'calcium':'${calcium_Controller.text}',
+                            'zinc':'${zinc_Controller.text}',
+                            'cropname':'${_crop_Controller.text.toLowerCase()}'
+                          }).whenComplete(() =>  setState(() {
+                            trigger=1;
+                          }));
+                          EasyLoading.showSuccess('Added');
+                        }
+                        catch(e){
+                          var s='$e'.split(']');
+                          EasyLoading.showSuccess('Error : ${s[1]}');
+                        }
 
-                        });
+
+
+
 
 
                        }, child: Text('Register',style: TextStyle(color: Colors.white),))
