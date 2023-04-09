@@ -82,7 +82,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             child:Image.network('${data[index]!['image']}',fit: BoxFit.fill,),),
                         ),
                         Container(
-                          width: 400,
+                          width: size.width*0.39,
                           child: ListTile(
                             isThreeLine: true,
                             onTap: () async {

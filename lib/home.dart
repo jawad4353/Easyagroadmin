@@ -18,6 +18,7 @@ import 'homescreens/Dealers.dart';
 import 'homescreens/Farmers.dart';
 import 'homescreens/addadmin.dart';
 import 'homescreens/dashboard.dart';
+import 'homescreens/diseases.dart';
 import 'homescreens/orders.dart';
 import 'login.dart';
 
@@ -30,7 +31,7 @@ class home extends StatefulWidget{
 
 class _homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm()];
+  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm(),Diseases()];
   var current_email;
  @override
   void initState() {
@@ -206,7 +207,21 @@ class _homeState extends State<home> {
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
                     overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)
                 ), icon: Icon(Icons.add,color: Colors.white,),
-                    label: Text('Add Admin',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
+                    label: Text('Admin',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
+
+
+
+
+         ,ElevatedButton.icon(onPressed: (){
+           setState(() {
+             widget.index=6;
+           });
+                },style:ButtonStyle(
+               backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+               elevation: MaterialStateProperty.resolveWith((states) => 0),
+               overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)), icon: Icon(Icons.coronavirus,color: Colors.white,),
+            label: Text('Diseases',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
+
 
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: () async {
