@@ -66,54 +66,74 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         ),
                       ),
                     ),
-                    child: ListTile(
-                      isThreeLine: true,
-                      onTap: () async {
-                        SharedPreferences pref =await SharedPreferences.getInstance();
-                        var current_email= await pref.getString("email");
-                        Navigator.push(context,
-                            Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
-                              contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
-                          countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
-                      },
-                      title:Text('${data[index]!['name']}',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500),),
-                      subtitle: Text(' ${data[index]!['email']}\n${data[index]!['countrycode']+data[index]!['contact']}'
-                        ,style: TextStyle(fontWeight: FontWeight.w500),) ,
-                      leading:  Image.network('${ data[index]!['image']}',width: 90,fit: BoxFit.fill,),
-                      trailing:Wrap(children: [
-                        ElevatedButton(onPressed: () async {
-                          SharedPreferences pref =await SharedPreferences.getInstance();
-                          var current_email= await pref.getString("email");
-                          Navigator.push(context,
-                              Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
-                                contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
+                    child: Wrap(
+                      children: [
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, Myroute(View_Network_Image(url:data[index]!['image'] ,)));
+                          },
+                          child: Container(
+                            height:80,
+                            width: 110,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12)
+                            ),
+                            child:Image.network('${data[index]!['image']}',fit: BoxFit.fill,),),
+                        ),
+                        Container(
+                          width: 400,
+                          child: ListTile(
+                            isThreeLine: true,
+                            onTap: () async {
+                              SharedPreferences pref =await SharedPreferences.getInstance();
+                              var current_email= await pref.getString("email");
+                              Navigator.push(context,
+                                  Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
+                                    contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
                                 countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
-                        },child: Icon(Icons.update,color: Colors.white,),),
-                        Text('  '),
-                        ElevatedButton(onPressed: () async {
-                          SharedPreferences pref =await SharedPreferences.getInstance();
-                         var current_email= await pref.getString("email");
-                         if(current_email!=data[index]!['email'])
-                           {
-                          try{
-                            new Database().deleteImage(data[index]!['image']);
-                            await Firestore.instance.collection('admin').document('${data[index]!['email']}').delete();
-                            EasyLoading.showSuccess('Deleted');
-                            setState(() {
+                            },
+                            title:Text('${data[index]!['name']}',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500),),
+                            subtitle: Text(' ${data[index]!['email']}\n${data[index]!['countrycode']+data[index]!['contact']}\nAdmin'
+                              ,style: TextStyle(fontWeight: FontWeight.w500),) ,
 
-                            });
-                          }
-                          catch(e){
-                            EasyLoading.showError(' Error Deleting Image $e');
-                            return;
-                          }
-                        }
-                         else{
-                           EasyLoading.showError('You cannot delete your Account !');
-                           return;
-                         }
-                         },child: Icon(Icons.delete,color: Colors.white,),),
-                      ],) ,
+                            trailing:Wrap(children: [
+                              ElevatedButton(onPressed: () async {
+                                SharedPreferences pref =await SharedPreferences.getInstance();
+                                var current_email= await pref.getString("email");
+                                Navigator.push(context,
+                                    Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
+                                      contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
+                                      countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
+                              },child: Icon(Icons.update,color: Colors.white,),),
+                              Text('  '),
+                              ElevatedButton(onPressed: () async {
+                                SharedPreferences pref =await SharedPreferences.getInstance();
+                               var current_email= await pref.getString("email");
+                               if(current_email!=data[index]!['email'])
+                                 {
+                                try{
+                                  new Database().deleteImage(data[index]!['image']);
+                                  await Firestore.instance.collection('admin').document('${data[index]!['email']}').delete();
+                                  EasyLoading.showSuccess('Deleted');
+                                  setState(() {
+
+                                  });
+                                }
+                                catch(e){
+                                  EasyLoading.showError(' Error Deleting Image $e');
+                                  return;
+                                }
+                              }
+                               else{
+                                 EasyLoading.showError('You cannot delete your Account !');
+                                 return;
+                               }
+                               },child: Icon(Icons.delete,color: Colors.white,),),
+                            ],) ,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                     }

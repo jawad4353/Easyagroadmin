@@ -210,31 +210,14 @@ class _homeState extends State<home> {
 
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: () async {
-                  SharedPreferences pref =await SharedPreferences.getInstance();
-                  pref.clear();
-                  showDialog(context: context, builder: (context)=>AlertDialog(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      Text('Are you sure ?'),
-                      Text('You will be redirected to login page and will be logout ',style: TextStyle(
-                        fontWeight: FontWeight.normal,fontSize: 15
-                      ),),
-                    ],),
-                    actions: [
-                      ElevatedButton(style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.lightGreen.shade700
-                  ),onPressed: (){
-                        EasyLoading.showSuccess('Logout');
-                        Navigator.pushReplacement(context, Myroute(Login()));
-                      }, child: Text('Yes')),
-                      ElevatedButton(style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightGreen.shade700
-                      ),onPressed: (){
-                        Navigator.of(context).pop();
-                      }, child: Text('No')),
-                    ],
-                  ));
+                  
+                  var result=await onClick(context);
+                  if(result==true){
+                    SharedPreferences pref =await SharedPreferences.getInstance();
+                    pref.clear();
+                    EasyLoading.showSuccess('Logout');
+                    Navigator.pushReplacement(context, Myroute(Login()));
+                  }
 
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
@@ -276,7 +259,9 @@ class View_Network_Image extends StatelessWidget{
   Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: Colors.lightGreen,
-    appBar: AppBar(elevation: 0,),
+    appBar: AppBar(elevation: 0,leading: IconButton(onPressed: (){
+      Navigator.of(context).pop();
+    },icon: Icon(Icons.arrow_back_rounded,color: Colors.white,),),),
     body: Container(
 
       child: Center(child: InteractiveViewer(
@@ -287,4 +272,23 @@ class View_Network_Image extends StatelessWidget{
   );
   }
 
+}
+
+
+
+Future<bool> onClick(context)async{
+  return (await showDialog(context: context, builder:(context)=>AlertDialog(
+    title: Text('Are you sure?'),
+    content:  Text('You will be Logout of the App'),
+    actions: [
+      ElevatedButton(
+        onPressed: () => Navigator.of(context).pop(true),
+        child: Text('Yes',style: TextStyle(color: Colors.white),),
+      ),
+      ElevatedButton(
+        onPressed: () => Navigator.of(context).pop(false),
+        child:  Text('No',style: TextStyle(color: Colors.white)),
+      ),
+    ],
+  ))) ?? false;
 }
