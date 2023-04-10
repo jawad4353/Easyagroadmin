@@ -35,7 +35,7 @@ class _DiseasesState extends State<Diseases> {
           stream: Firestore.instance.collection('diseases').get().asStream(),
           builder: (context,snap){
             if(!snap.hasData){
-              return show_progress_indicator();
+              return show_progress_indicator(border_color: Colors.lightGreen,);
             }
             var data=snap.data!.asMap();
 
@@ -62,16 +62,16 @@ class _DiseasesState extends State<Diseases> {
                  child: ListTile(
                    leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                    trailing: Wrap(children: [
-                     ElevatedButton(onPressed: (){
+                     ElevatedButton.icon(onPressed: (){
                        setState(() {
                          disease_name_controller.text='${data[index]!['name']}';
                          description_controller.text='${data[index]!['description']}';
                          affecting_crop_control.text='${data[index]!['affectingcrops']}';
                          youtube_link_controller.text='${data[index]!['youtubelink']}';
                        });
-                     }, child: Icon(Icons.update,color: Colors.white,)),
+                     }, icon: Icon(Icons.update,color: Colors.white,),label: Text('Update',style: TextStyle(color: Colors.white),),),
                      Text('  '),
-                     ElevatedButton(onPressed: () async {
+                     ElevatedButton.icon(onPressed: () async {
                        EasyLoading.show(status: 'deleting');
                        try{
                         await Firestore.instance.collection('diseases').document('${data[index]!['name']}').delete().whenComplete(() =>   setState(() {
@@ -84,7 +84,9 @@ class _DiseasesState extends State<Diseases> {
                          EasyLoading.showError('$e');
                        }
 
-                     }, child: Icon(Icons.delete,color: Colors.white,)),
+                     }, icon: Icon(Icons.delete,color: Colors.white,),
+                     label: Text('Delete',style: TextStyle(color: Colors.white)),
+                     ),
                    ],),
                    title: Text('${data[index]!['name']}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
                    subtitle: Text('${data[index]!['affectingcrops']}'),

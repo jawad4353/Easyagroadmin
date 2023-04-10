@@ -57,7 +57,7 @@ class _FarmersState extends State<Farmers> {
                      stream: Firestore.instance.collection('cropname').get().asStream(),
                      builder: (context,snap){
                        if(!snap.hasData){
-                         return show_progress_indicator();
+                         return show_progress_indicator(border_color: Colors.lightGreen,);
                        }
                        var data=snap.data!.asMap();
 
@@ -83,13 +83,14 @@ class _FarmersState extends State<Farmers> {
                                  onTap: () async {
                                  },
                                  leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.lightGreen),),
-                                 trailing: ElevatedButton(onPressed: (){
+                                 trailing: ElevatedButton.icon(onPressed: (){
                                    Firestore.instance.collection('cropname').document('${data[index]!.id}').delete();
                                    EasyLoading.showSuccess('Deleted');
                                    setState(() {
 
                                    });
-                                 },child: Icon(Icons.delete,color: Colors.white,),),
+                                 },icon: Icon(Icons.delete,color: Colors.white,),
+                                   label: Text('Delete',style: TextStyle(color: Colors.white)),),
                                  title:  Text('${data[index]!['name']}', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16,color: Colors.black),),
                                  subtitle:   Text('Min : ${data[index]!['minimum']}°C   Max : ${data[index]!['maximum']}°C', style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: Colors.grey),),
 
@@ -116,7 +117,7 @@ class _FarmersState extends State<Farmers> {
                    stream: Firestore.instance.collection('crops').orderBy('cropname').get().asStream(),
                    builder: (context,snap){
                      if(!snap.hasData){
-                       return show_progress_indicator();
+                       return show_progress_indicator(border_color: Colors.lightGreen,);
                      }
                      var data=snap.data!.asMap();
 
@@ -138,7 +139,7 @@ class _FarmersState extends State<Farmers> {
                                },
                                 leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.lightGreen),),
                                 trailing: Wrap(children: [
-                                  ElevatedButton(onPressed: (){
+                                  ElevatedButton.icon(onPressed: (){
                                     setState(() {
 
                                       _soilTypeController.text=name[0];
@@ -149,15 +150,17 @@ class _FarmersState extends State<Farmers> {
                                       phosphorus_Controller.text='${data[index]!['phosphorus']}';
                                       zinc_Controller.text='${data[index]!['zinc']}';
                                     });
-                                  }, child:Icon(Icons.update,color: Colors.white,)),
+                                  }, icon:Icon(Icons.update,color: Colors.white,),
+                                    label: Text('Update',style: TextStyle(color: Colors.white)),),
                                   Text('  '),
-                                  ElevatedButton(onPressed: (){
+                                  ElevatedButton.icon(onPressed: (){
                                     EasyLoading.show(status: 'Deleting');
                                     Firestore.instance.collection('crops').document(data[index]!.id).delete();
                                     setState(() {
                                        EasyLoading.dismiss();
                                     });
-                                  }, child:Icon(Icons.delete,color: Colors.white,)),
+                                  }, icon:Icon(Icons.delete,color: Colors.white,),
+                                    label: Text('Delete',style: TextStyle(color: Colors.white)),),
                                 ],),
                                title:Text('${name[0]}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
                                 subtitle:Wrap(children: [
@@ -355,7 +358,7 @@ class _FarmersState extends State<Farmers> {
                          stream: Firestore.instance.collection('cropname').stream,
                          builder: (context, snapshot) {
                            if(!snapshot.hasData){
-                             return show_progress_indicator();
+                             return show_progress_indicator(border_color: Colors.lightGreen,);
                            }
                            _crops.clear();
                           var data= snapshot.data!.asMap();

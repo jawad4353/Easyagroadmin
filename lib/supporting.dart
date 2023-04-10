@@ -192,6 +192,8 @@ jd(){
 
 
 class show_progress_indicator extends StatelessWidget{
+  Color border_color;
+  show_progress_indicator({required this.border_color});
   @override
   Widget build(BuildContext context) {
     return
@@ -205,7 +207,7 @@ class show_progress_indicator extends StatelessWidget{
             var Mycol=Mycolors[index%Mycolors.length];
             return DecoratedBox(decoration: BoxDecoration(
                 color: Mycol,
-                border: Border.all(color: Colors.lightGreen.shade700,)
+                border: Border.all(color: border_color,)
 
             ));
           }),
@@ -217,6 +219,8 @@ class show_progress_indicator extends StatelessWidget{
   }
 
 }
+
+
 
 
 
@@ -241,6 +245,7 @@ void Set_windowsize(height,width){
 
 
 class MyAppBar extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
    var size=MediaQuery.of(context).size;
@@ -249,7 +254,7 @@ class MyAppBar extends StatelessWidget{
         elevation: 0,
         centerTitle: true,
         toolbarHeight: 30,
-        backgroundColor: Colors.white,
+        backgroundColor:Colors.white,
         leadingWidth: 110,
         leading:   Row(
           mainAxisAlignment: MainAxisAlignment.center,

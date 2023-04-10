@@ -52,7 +52,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 stream: Firestore.instance.collection('admin').orderBy('name').get().asStream(),
                   builder: (context,snap){
                 if(!snap.hasData){
-                  return show_progress_indicator();
+                  return show_progress_indicator(border_color: Colors.lightGreen,);
                 }
                 var data=snap.data!.asMap();
                 return ListView.builder(
@@ -100,16 +100,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
                               ,style: TextStyle(fontWeight: FontWeight.w500),) ,
 
                             trailing:Wrap(children: [
-                              ElevatedButton(onPressed: () async {
+                              ElevatedButton.icon(onPressed: () async {
                                 SharedPreferences pref =await SharedPreferences.getInstance();
                                 var current_email= await pref.getString("email");
                                 Navigator.push(context,
                                     Myroute(Update_admin (image:data[index]!['image'] ,email: data[index]!['email'],
                                       contact: data[index]!['contact'],name: data[index]!['name'],current_email: current_email,
                                       countrycode: data[index]!['countrycode'] ,id: data[index]!['id'], )));
-                              },child: Icon(Icons.update,color: Colors.white,),),
+                              },icon: Icon(Icons.update,color: Colors.white,),
+                              label: Text('Update',style: TextStyle(color: Colors.white)),
+                              ),
                               Text('  '),
-                              ElevatedButton(onPressed: () async {
+                              ElevatedButton.icon(onPressed: () async {
                                 SharedPreferences pref =await SharedPreferences.getInstance();
                                var current_email= await pref.getString("email");
                                if(current_email!=data[index]!['email'])
@@ -131,7 +133,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
                                  EasyLoading.showError('You cannot delete your Account !');
                                  return;
                                }
-                               },child: Icon(Icons.delete,color: Colors.white,),),
+                               },icon: Icon(Icons.delete,color: Colors.white,),
+                                label: Text('Delete',style: TextStyle(color: Colors.white)),),
                             ],) ,
                           ),
                         ),
