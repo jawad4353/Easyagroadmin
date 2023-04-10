@@ -239,3 +239,50 @@ void Set_windowsize(height,width){
 
 
 
+
+class MyAppBar extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+   var size=MediaQuery.of(context).size;
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        toolbarHeight: 30,
+        backgroundColor: Colors.white,
+        leadingWidth: 110,
+        leading:   Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('images/appicona.png',height: 50,),
+            Text('  EasyAgro',style: TextStyle(color: Colors.grey,fontWeight: FontWeight.normal,fontSize: 14),),
+          ],),
+        actions: [
+          TextButton(onPressed: (){
+            appWindow.minimize();
+          }, child: Text('—',style: TextStyle(color: Colors.grey,fontSize: 20),),),
+          IconButton(onPressed: (){
+            if(appWindow.isMaximized){
+              appWindow.size=Size(800,800);
+              appWindow.maximizeOrRestore();
+
+            }
+
+            if(appWindow.size.height<size.height){
+              appWindow.maximize();
+
+            }
+
+          }, icon: Icon(Icons.web_asset,color: Colors.grey,size: 20,)),
+          IconButton(onPressed: (){
+            appWindow.close();
+          }, icon: Icon(Icons.close,color: Colors.grey,size: 20,)),
+
+        ],),
+    );
+  }
+
+}
+
+
+

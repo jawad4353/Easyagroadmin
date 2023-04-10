@@ -82,6 +82,7 @@ class _FarmersState extends State<Farmers> {
 
                                  onTap: () async {
                                  },
+                                 leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.lightGreen),),
                                  trailing: ElevatedButton(onPressed: (){
                                    Firestore.instance.collection('cropname').document('${data[index]!.id}').delete();
                                    EasyLoading.showSuccess('Deleted');
@@ -135,6 +136,7 @@ class _FarmersState extends State<Farmers> {
                                 isThreeLine: true,
                                onTap: () async {
                                },
+                                leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.lightGreen),),
                                 trailing: Wrap(children: [
                                   ElevatedButton(onPressed: (){
                                     setState(() {

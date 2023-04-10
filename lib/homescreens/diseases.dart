@@ -60,6 +60,7 @@ class _DiseasesState extends State<Diseases> {
                   });
                 },
                  child: ListTile(
+                   leading:  Text('${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                    trailing: Wrap(children: [
                      ElevatedButton(onPressed: (){
                        setState(() {

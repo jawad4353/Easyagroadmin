@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:easyagroadmin/home.dart';
@@ -68,13 +69,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     ),
                     child: Wrap(
                       children: [
+                        Text('${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                         InkWell(
                           onTap: (){
                             Navigator.push(context, Myroute(View_Network_Image(url:data[index]!['image'] ,)));
                           },
                           child: Container(
                             height:80,
-                            width: 110,
+                            width: 120,
                             clipBehavior: Clip.antiAlias,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12)
@@ -82,7 +84,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                             child:Image.network('${data[index]!['image']}',fit: BoxFit.fill,),),
                         ),
                         Container(
-                          width: size.width*0.39,
+                          width: size.width*0.37,
                           child: ListTile(
                             isThreeLine: true,
                             onTap: () async {
@@ -412,6 +414,7 @@ class Update_admin extends StatefulWidget{
 }
 
 class _Update_adminState extends State<Update_admin> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var countrycode='+92',hidepassword=true,_image=null;
   TextEditingController email_controller=new TextEditingController();
   TextEditingController contact_controller=new TextEditingController();
@@ -428,196 +431,223 @@ class _Update_adminState extends State<Update_admin> {
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
   return Scaffold(
-    appBar: AppBar(),
+    appBar: PreferredSize(
+        preferredSize: Size(30,30),
+        child:   MyAppBar(),),
     backgroundColor: Colors.white,
-    body: Center(
-      child: Container(
-        width: size.width*0.27,
-        padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(18)
+    body: Container(
+      width: size.width,
+      height: size.height,
+      decoration: BoxDecoration(
+        color: Colors.lightGreen.shade700,
+        image: DecorationImage(
+            image: Image.asset('images/back2.jpg').image,
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.8),
+              BlendMode.dstATop,
+            )
         ),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
+      ),
 
-            children: [
-              Container(
-                width: size.width*0.26,
-                height: 200,
-                color: Colors.black12,
-                child: GestureDetector(
-                  onTap: () async {
-                    FilePickerResult? result =
-                    await FilePicker.platform.pickFiles(type: FileType.image);
+      child: Center(
+        child: Padding(
+          padding:  EdgeInsets.all(3.0),
+          child: Container(
+            width: size.width*0.32,
+            padding: EdgeInsets.fromLTRB(13, 15, 13, 15),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(18)
+            ),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
 
-                    if (result != null) {
-                      setState(() {
-                        _image = File(result.files.single.path!);
-                      });
-                    }
-                  },
-                  child: _image != null
-                      ? Image.file(_image !, fit: BoxFit.cover)
-                      : Image.network('${widget.image}',fit: BoxFit.fitWidth,),
-                ),
-              ),
+                children: [
+                 Row(children: [
+                   IconButton(onPressed: (){
+                     Navigator.of(context).pop();
+                   }, icon:Icon(Icons.arrow_back)),
+                   Text('Update',style: TextStyle(fontWeight: FontWeight.w500),)
+                 ],),
+                  Container(
+                    width: size.width*0.32,
+                    height: 200,
+                    color: Colors.black12,
+                    child: GestureDetector(
+                      onTap: () async {
+                        FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(type: FileType.image);
 
-              SizedBox(height: 20),
-              TextFormField(
-                controller: name_controller,
-                inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z.-. - ]')),],
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 20),
-
-              TextFormField(
-                controller: contact_controller,
-                inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
-                decoration:  InputDecoration(
-                  prefixIcon: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          elevation: 0,
-                          shadowColor: Colors.transparent
-                      ),
-                      onPressed: (){
-                        showCountryPicker(
-                          context: context,
-                          showPhoneCode: true,
-                          countryListTheme: CountryListThemeData(
-                              inputDecoration: InputDecoration(
-                                hintText: 'Search',
-                                fillColor: Colors.white,
-                                filled: true,
-                                focusedErrorBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green))  ,
-                                focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)) ,
-                                enabledBorder:UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)) ,
-                                errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
-                                border:  UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)),
-                              )
-                          ),// optional. Shows phone code before the country name.
-                          onSelect: (Country country) {
-                            setState(() {
-                              widget.countrycode='+'+country.phoneCode;
-                            });
-                          },
-                        );
-
-                      }, child:Text('${widget.countrycode}',style: TextStyle(color: Colors.black),)),
-                  labelText: 'Contact',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: email_controller,
-                inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.-.@-@_-_]')),],
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-
-              SizedBox(height: 20),
-              Container(
-                width: size.width*0.27,
-                child:ElevatedButton(onPressed: () async {
-                  if(name_controller.text.isEmpty){
-                    EasyLoading.showInfo('Name required');
-                    return;
-                  }
-                  var a=name_controller.text.replaceAll(' ', '');
-                  if(a.length<3){
-                    EasyLoading.showInfo('Name must have three characters');
-                    return;
-                  }
-                  if(a.length>30){
-                    EasyLoading.showInfo('Name should not exceed 30 characters');
-                    return;
-                  }
-                  if(contact_controller.text.isEmpty){
-                    EasyLoading.showInfo('Contact required !');
-                    return;
-                  }
-
-                  if(email_controller.text.isEmpty){
-                    EasyLoading.showInfo('Email required');
-                    return;
-                  }
-
-                  if(contact_controller.text.length!=10){
-                    EasyLoading.showInfo('Enter 10 digit contact');
-                    return;
-                  }
-                  var s=Email_Validation(email_controller.text);
-
-                  EasyLoading.show(status: 'Processing',dismissOnTap: false);
-
-                  final email_exists = await new Database().Check_duplicateEmail(email_controller.text,widget.id);
-                   print(email_exists);
-                  if(email_exists){
-                    EasyLoading.showInfo('Already Registered Email !');
-                    return;
-                  }
-
-
-                  try{
-                    if(_image==null){
-                      await Firestore.instance.collection('admin').document('${email_controller.text}').update({
-                        'name': name_controller.text,
-                        'email': email_controller.text,
-                        'contact': contact_controller.text,
-                        'countrycode':'${widget.countrycode}'
-                      });
-                      EasyLoading.showSuccess('Updated');
-                      Navigator.pushReplacement(context, Myroute(home(index: 5,)));
-                      return ;
-                    }
-                    final file = File(_image.path);
-                    final imageUrl = await new Database().uploadImage(file,email_controller.text);
-                    if(imageUrl!=null){
-                      var s='${imageUrl['name']}'.replaceAll('@', '%40');
-                      var s1='${s}'.replaceAll('/', '%2F');
-
-                      final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
-                      await Firestore.instance.collection('admin').document('${email_controller.text}').update({
-                        'name': name_controller.text,
-                        'email': email_controller.text,
-                        'image': '$downloadUrl',
-                        'contact': contact_controller.text,
-                        'countrycode':'${widget.countrycode}'
-                      });
-                    }
-
-                    EasyLoading.showSuccess('Updated');
-                    Navigator.pushReplacement(context, Myroute(home(index: 5,)));
-                  }
-                  catch(e){
-                    EasyLoading.showError('Error Updating Admin ${e}');
-                    return;
-                  }
-
-
-
-
-                  EasyLoading.dismiss();
-
-                },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightGreen.shade700
+                        if (result != null) {
+                          setState(() {
+                            _image = File(result.files.single.path!);
+                          });
+                        }
+                      },
+                      child: _image != null
+                          ? Image.file(_image !, fit: BoxFit.fill)
+                          : Image.network('${widget.image}',fit: BoxFit.fitWidth,),
+                    ),
                   ),
-                  child: Text('Update',style: TextStyle(color: Colors.white),),),),
+
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: name_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z.-. - ]')),],
+                    decoration: const InputDecoration(
+                      labelText: 'Name',
+
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+
+                  TextFormField(
+                    controller: contact_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),],
+                    decoration:  InputDecoration(
+                      prefixIcon: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              elevation: 0,
+                              shadowColor: Colors.transparent
+                          ),
+                          onPressed: (){
+                            showCountryPicker(
+                              context: context,
+                              showPhoneCode: true,
+                              countryListTheme: CountryListThemeData(
+                                  inputDecoration: InputDecoration(
+                                    hintText: 'Search',
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    focusedErrorBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green))  ,
+                                    focusedBorder:UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)) ,
+                                    enabledBorder:UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)) ,
+                                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey)),
+                                    border:  UnderlineInputBorder(borderSide: BorderSide(color:Colors.grey)),
+                                  )
+                              ),// optional. Shows phone code before the country name.
+                              onSelect: (Country country) {
+                                setState(() {
+                                  widget.countrycode='+'+country.phoneCode;
+                                });
+                              },
+                            );
+
+                          }, child:Text('${widget.countrycode}',style: TextStyle(color: Colors.black),)),
+                      labelText: 'Contact',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: email_controller,
+                    inputFormatters: [  FilteringTextInputFormatter.allow(RegExp(r'[0-9a-zA-Z.-.@-@_-_]')),],
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
+                  Container(
+                    width: size.width*0.27,
+                    child:ElevatedButton(onPressed: () async {
+                      if(name_controller.text.isEmpty){
+                        EasyLoading.showInfo('Name required');
+                        return;
+                      }
+                      var a=name_controller.text.replaceAll(' ', '');
+                      if(a.length<3){
+                        EasyLoading.showInfo('Name must have three characters');
+                        return;
+                      }
+                      if(a.length>30){
+                        EasyLoading.showInfo('Name should not exceed 30 characters');
+                        return;
+                      }
+                      if(contact_controller.text.isEmpty){
+                        EasyLoading.showInfo('Contact required !');
+                        return;
+                      }
+
+                      if(email_controller.text.isEmpty){
+                        EasyLoading.showInfo('Email required');
+                        return;
+                      }
+
+                      if(contact_controller.text.length!=10){
+                        EasyLoading.showInfo('Enter 10 digit contact');
+                        return;
+                      }
+                      var s=Email_Validation(email_controller.text);
+
+                      EasyLoading.show(status: 'Processing',dismissOnTap: false);
+
+                      final email_exists = await new Database().Check_duplicateEmail(email_controller.text,widget.id);
+                       print(email_exists);
+                      if(email_exists){
+                        EasyLoading.showInfo('Already Registered Email !');
+                        return;
+                      }
 
 
-            ],
+                      try{
+                        if(_image==null){
+                          await Firestore.instance.collection('admin').document('${email_controller.text}').update({
+                            'name': name_controller.text,
+                            'email': email_controller.text,
+                            'contact': contact_controller.text,
+                            'countrycode':'${widget.countrycode}'
+                          });
+                          EasyLoading.showSuccess('Updated');
+                          Navigator.pushReplacement(context, Myroute(home(index: 5,)));
+                          return ;
+                        }
+                        final file = File(_image.path);
+                        final imageUrl = await new Database().uploadImage(file,email_controller.text);
+                        if(imageUrl!=null){
+                          var s='${imageUrl['name']}'.replaceAll('@', '%40');
+                          var s1='${s}'.replaceAll('/', '%2F');
 
+                          final downloadUrl = 'https://firebasestorage.googleapis.com/v0/b/easyagro-ed808.appspot.com/o/${s1}?alt=media&token=${imageUrl['downloadTokens']}';
+                          await Firestore.instance.collection('admin').document('${email_controller.text}').update({
+                            'name': name_controller.text,
+                            'email': email_controller.text,
+                            'image': '$downloadUrl',
+                            'contact': contact_controller.text,
+                            'countrycode':'${widget.countrycode}'
+                          });
+                        }
+
+                        EasyLoading.showSuccess('Updated');
+                        Navigator.pushReplacement(context, Myroute(home(index: 5,)));
+                      }
+                      catch(e){
+                        EasyLoading.showError('Error Updating Admin ${e}');
+                        return;
+                      }
+
+
+
+
+                      EasyLoading.dismiss();
+
+                    },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightGreen.shade700
+                      ),
+                      child: Text('Update',style: TextStyle(color: Colors.white),),),),
+
+
+                ],
+
+            ),
+          ),
         ),
       ),
     ) ,
