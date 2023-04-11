@@ -5,8 +5,11 @@ import 'package:easyagroadmin/home.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../database.dart';
 import '../supporting.dart';
+import 'Email_sending.dart';
 
 class Companies extends StatefulWidget{
   @override
@@ -20,7 +23,8 @@ class _CompaniesState extends State<Companies> {
     var size=MediaQuery.of(context).size;
    return Scaffold(
      backgroundColor: Colors.white,
-     appBar: AppBar(centerTitle: true,title: Text('Pending Verifications',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),backgroundColor: Colors.white,elevation: 0,),
+     appBar: AppBar(centerTitle: true,title: Text('Pending Verifications',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold)),backgroundColor: Colors.white,elevation: 0,),
+
      body: Column(
 
        children: [
@@ -91,17 +95,42 @@ class _CompaniesState extends State<Companies> {
                                onTap: (){
 
                                },
-                               title: Text('${data[index]!['name']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                               title: Text('${data[index]!['name']}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 17),),
                                trailing: Wrap(children: [
                                  Container(
                                    width: 140,
-                                   child: ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.approval,color: Colors.white,),
+                                   child: ElevatedButton.icon(onPressed: (){
+                                    try{
+
+                                      Firestore.instance.collection('company').document(data[index]!.id).update({
+                                        'accountstatus':'verified'
+                                      }).whenComplete(() =>setState(() {
+                                        Send_mailAdmin(data[index]!['email'],' EasyAgro Account Approved','Hi your Company Account for Easy'
+                                            'Agro Application has been Approved . You can Login to your Account Now using your license and password ');
+                                        EasyLoading.showSuccess('Approved');
+
+                                      }));
+                                    }
+                                    catch(e)
+                                     {
+                                       EasyLoading.showError('$e');
+                                     }
+                                   }, icon: Icon(Icons.approval,color: Colors.white,),
                                        label:Text('Approve',style: TextStyle(color: Colors.white),) ),
                                  ),
                                  Text(' '),
                                  Container(
                                    width: 140,
-                                   child: ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.delete,color: Colors.white,),
+                                   child: ElevatedButton.icon(onPressed: () async {
+                                     var s=await showEmailDialog(context,data[index]);
+                                     if(s==true || s==false){
+                                       setState(() {
+
+                                       });
+                                     }
+
+
+                                   }, icon: Icon(Icons.delete,color: Colors.white,),
                                        label: Text('Reject',style: TextStyle(color: Colors.white))),
                                  ),
                                ],),
@@ -111,10 +140,10 @@ class _CompaniesState extends State<Companies> {
                                  crossAxisAlignment: CrossAxisAlignment.start,
                                  children: [
 
-                                 Text('${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                                   Text('${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                                   Text('${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                                   Text('${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                 Text('Contact : ${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                   Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                   Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                   Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
                                ],),
 
                              ),
@@ -125,7 +154,9 @@ class _CompaniesState extends State<Companies> {
                  },
                ),
              ),
-         Text('\n  Verified Companies\n',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+
+
+         Text('\n  Verified Companies\n',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
          Container(
            height: size.height*0.3,
            color: Colors.white,
@@ -145,10 +176,77 @@ class _CompaniesState extends State<Companies> {
                ListView.builder(
                    itemCount:data.length ,
                    itemBuilder: (context,index){
-                     return ListTile(
-                       title: Text('${data[index]!['name']}'),
-                       subtitle: Text('${data[index]!['license']}'),
-                     );
+                     return Wrap(children: [
+
+                       Text('    ${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                       InkWell(
+                         onTap: (){
+                           Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
+                         },
+                         child: Container(
+                           height:100,
+                           width: 150,
+                           clipBehavior: Clip.antiAlias,
+                           decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(12),
+                               border: Border.all(color: Colors.black12)
+                           ),
+                           child:Image.network('${data[index]!['profileimage']}',fit: BoxFit.fill,),),
+                       ),
+                       Text(' '),
+                       InkWell(
+                         onTap: (){
+                           Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
+                         },
+                         child: Container(
+                           height:100,
+                           width: 150,
+                           clipBehavior: Clip.antiAlias,
+                           decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(12),
+                               border: Border.all(color: Colors.black12)
+                           ),
+                           child:Image.network('${data[index]!['licenseimage']}',fit: BoxFit.fill,),),
+                       ),
+
+
+                       Container(
+                         width: size.width*0.5,
+                         child: ListTile(
+                           title: Text('${data[index]!['name']}'),
+
+                           subtitle: Column(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+
+                               Text('Contact : ${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                               Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                               Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                               Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                             ],),
+                           trailing: Container(
+                             width: 140,
+                             child: ElevatedButton.icon(onPressed: () async {
+                               // try{
+                               //   new Database().deleteImage(data['profileimage']);
+                               //   new Database().deleteImage(data['licenseimage']);
+                               //   await Firestore.instance.collection('company').document(data[index]!.id).delete();
+                               //   await Firestore.instance.collection('products').document(data[index]!.id).delete();
+                               //   EasyLoading.showSuccess('Deleted');
+                               //
+                               // }
+                               // catch(e)
+                               // {
+                               //   EasyLoading.showError('$e');
+                               // }
+                             }, icon: Icon(Icons.delete,color: Colors.white,), label: Text('Delete',style: TextStyle(
+                               color: Colors.white
+                             ),)),
+                           ),
+                         ),
+                       )
+                     ],);
                    });
              },
            ),

@@ -191,6 +191,35 @@ jd(){
 
 
 
+
+
+void Send_mailAdmin(receiver_email,subject,message){
+  var
+  Service_id='service_plttjgm',
+      Template_id='template_vmg32zl',
+      User_id='_ILHAzYAP3Rq7M8s7';
+  var s=http.post(Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
+      headers: {
+        'origin':'http:localhost',
+        'Content-Type':'application/json'
+      },
+      body: jsonEncode({
+        'service_id':Service_id,
+        'user_id':User_id,
+        'template_id':Template_id,
+        'template_params':{
+          'receiver_email':receiver_email,
+          'subject':subject,
+          'message':message
+
+        }
+      })
+  ).onError((error, stackTrace) => jd());
+
+}
+
+
+
 class show_progress_indicator extends StatelessWidget{
   Color border_color;
   show_progress_indicator({required this.border_color});
