@@ -10,49 +10,43 @@ class Orders extends StatelessWidget{
       appBar: AppBar(centerTitle: true,title: Text('Active',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold)),backgroundColor: Colors.white,elevation: 0,),
 
       body: Column(children: [
-       StreamBuilder(
-           stream: Firestore.instance.collection('orders').where('status' ,isEqualTo: 'verified').get().asStream(),
-           builder: (context,snap){
-         var data=snap.data!.asMap();
-         return ListView.builder(itemBuilder: (context,index){
-           Container(
-             width: size.width*0.61,
-             child: ListTile(
-               title: Text('${data[index]!['name']}'),
+       Container(
+         height: 600,
+         width: 600,
+         child: StreamBuilder(
+             stream: Firestore.instance.collection('orders').where('status' ,isEqualTo: 'confirmed').get().asStream(),
+             builder: (context,snap){
+           var data=snap.data!.asMap();
+           print(data);
+           return data.length==0 ? Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               Icon(Icons.favorite,size: 45,color: Colors.lightGreen,),
+               Text('No Orders',style: TextStyle(fontWeight: FontWeight.w500),),
+             ],):
 
-               subtitle: Column(
-                 mainAxisAlignment: MainAxisAlignment.start,
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
+             ListView.builder(itemBuilder: (context,index){
+             Container(
+               width: size.width*0.61,
+               child: ListTile(
+                 title: Text('j'),
 
-                   Text('Contact : ${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                   Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                   Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                   Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                 ],),
-               trailing:Wrap(children: [
-                 Container(
-                   width: 140,
-                   child: ElevatedButton.icon(onPressed: () async {
+                 // subtitle: Column(
+                 //   mainAxisAlignment: MainAxisAlignment.start,
+                 //   crossAxisAlignment: CrossAxisAlignment.start,
+                 //   children: [
+                 //
+                 //     Text('Contact : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                 //     Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                 //     Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                 //     Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                 //   ],),
 
-                   }, icon: Icon(Icons.panorama_rounded,color: Colors.white,), label: Text('Products',style: TextStyle(
-                       color: Colors.white
-                   ),)),
-                 ),
-                 Text(' '),
-                 Container(
-                   width: 140,
-                   child: ElevatedButton.icon(onPressed: () async {
-
-                   }, icon: Icon(Icons.favorite_border,color: Colors.white,), label: Text('Orders',style: TextStyle(
-                       color: Colors.white
-                   ),)),
-                 )
-               ],),
-             ),
-           );
-         });
-       })
+               ),
+             );
+           });
+         }),
+       )
       ],),
     );
   }

@@ -243,18 +243,40 @@ class View_Network_Image extends StatelessWidget{
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
   return Scaffold(
-    backgroundColor: Colors.lightGreen,
+    backgroundColor: Colors.white,
 
     appBar:PreferredSize(
       preferredSize: Size(30,30),
       child:   MyAppBar(),),
-    body: Container(
+    body: ListView(
+      children: [
+        Padding(
+          padding:  EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
 
-      child: Center(child: InteractiveViewer(
-          maxScale: 10,
-          minScale: 0.5,
-          child: Image.network('$url'))),
-    ),
+                  decoration: BoxDecoration(
+                      color: Colors.lightGreen,
+                      shape: BoxShape.circle
+                  ),
+                  child: IconButton(onPressed: (){
+                    Navigator.of(context).pop();
+                  }, icon: Icon(Icons.arrow_back,color: Colors.white,))),
+            ],
+          ),
+        ),
+        Container(
+          height: size.height*0.9,
+          width: size.width,
+          child: Center(child: InteractiveViewer(
+              maxScale: 7,
+              minScale: 0.5,
+              child: Image.network('$url'))),
+        ),
+      ],
+    )
   );
   }
 

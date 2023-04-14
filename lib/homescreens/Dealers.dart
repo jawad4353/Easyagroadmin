@@ -36,8 +36,8 @@ class _DealersState extends State<Dealers> {
               return  data.length==0 ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.no_drinks),
-                  Text('No Pending Verifications'),
+                  Icon(Icons.no_drinks,size: 45,color: Colors.lightGreen,),
+                  Text('No Pending Verifications',style: TextStyle(fontWeight: FontWeight.w500),),
                 ],):
               ListView.builder(
                   itemCount:data.length ,
@@ -159,11 +159,11 @@ class _DealersState extends State<Dealers> {
                 return show_progress_indicator(border_color: Colors.lightGreen,);
               }
               var data=snap.data!.asMap();
-              return  data.length==0 ? Column(
+              return  data.length==0 ?Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.no_drinks),
-                  Text('No Verified Dealers'),
+                  Icon(Icons.no_drinks,size: 45,color: Colors.lightGreen,),
+                  Text('No Verified Dealers',style: TextStyle(fontWeight: FontWeight.w500),),
                 ],):
               ListView.builder(
                   itemCount:data.length ,

@@ -45,8 +45,8 @@ class _CompaniesState extends State<Companies> {
                    return  data.length==0 ? Column(
                      mainAxisAlignment: MainAxisAlignment.center,
                      children: [
-                       Icon(Icons.no_drinks),
-                       Text('No Pending Verifications'),
+                       Icon(Icons.no_drinks,size: 45,color: Colors.lightGreen,),
+                       Text('No Pending Verifications',style: TextStyle(fontWeight: FontWeight.w500),),
                      ],):
                    ListView.builder(
                      itemCount:data.length ,
@@ -170,8 +170,8 @@ class _CompaniesState extends State<Companies> {
                return  data.length==0 ? Column(
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
-                   Icon(Icons.no_drinks),
-                   Text('No Verified Company '),
+                   Icon(Icons.no_drinks,size: 45,color: Colors.lightGreen,),
+                   Text('No Verified Company ',style: TextStyle(fontWeight: FontWeight.w500),),
                  ],):
                ListView.builder(
                    itemCount:data.length ,
