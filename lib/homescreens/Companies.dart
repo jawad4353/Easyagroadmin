@@ -2,6 +2,7 @@
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easyagroadmin/home.dart';
+import 'package:easyagroadmin/homescreens/products.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +63,12 @@ class _CompaniesState extends State<Companies> {
                             child: Container(
                                  height:100,
                                  width: 150,
-                                 clipBehavior: Clip.antiAlias,
-                                 decoration: BoxDecoration(
-                                     borderRadius: BorderRadius.circular(12),
-                                   border: Border.all(color: Colors.black12)
-                                 ),
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.grey)
+                              ),
+
                                  child:Image.network('${data[index]!['profileimage']}',fit: BoxFit.fill,),),
                           ),
                            Text(' '),
@@ -80,7 +82,7 @@ class _CompaniesState extends State<Companies> {
                                clipBehavior: Clip.antiAlias,
                                decoration: BoxDecoration(
                                    borderRadius: BorderRadius.circular(12),
-                                   border: Border.all(color: Colors.black12)
+                                   border: Border.all(color: Colors.grey)
                                ),
                                child:Image.network('${data[index]!['licenseimage']}',fit: BoxFit.fill,),),
                            ),
@@ -88,9 +90,7 @@ class _CompaniesState extends State<Companies> {
                            Container(
                              width: size.width*0.6,
                              padding: EdgeInsets.only(bottom: 17),
-                             decoration: BoxDecoration(
-                               border: Border(bottom: BorderSide(color: Colors.black12))
-                             ),
+
                              child: ListTile(
                                onTap: (){
 
@@ -176,77 +176,84 @@ class _CompaniesState extends State<Companies> {
                ListView.builder(
                    itemCount:data.length ,
                    itemBuilder: (context,index){
-                     return Wrap(children: [
+                     return Container(
+                       padding: EdgeInsets.only(top: 10),
+                       decoration: BoxDecoration(
 
-                       Text('    ${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
-                       InkWell(
-                         onTap: (){
-                           Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
-                         },
-                         child: Container(
-                           height:100,
-                           width: 150,
-                           clipBehavior: Clip.antiAlias,
-                           decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(12),
-                               border: Border.all(color: Colors.black12)
-                           ),
-                           child:Image.network('${data[index]!['profileimage']}',fit: BoxFit.fill,),),
+                           border: Border(top: BorderSide(color: Colors.black12),bottom: BorderSide(color: Colors.black12) )
                        ),
-                       Text(' '),
-                       InkWell(
-                         onTap: (){
-                           Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
-                         },
-                         child: Container(
-                           height:100,
-                           width: 150,
-                           clipBehavior: Clip.antiAlias,
-                           decoration: BoxDecoration(
-                               borderRadius: BorderRadius.circular(12),
-                               border: Border.all(color: Colors.black12)
-                           ),
-                           child:Image.network('${data[index]!['licenseimage']}',fit: BoxFit.fill,),),
-                       ),
+                       child: Wrap(children: [
 
-
-                       Container(
-                         width: size.width*0.5,
-                         child: ListTile(
-                           title: Text('${data[index]!['name']}'),
-
-                           subtitle: Column(
-                             mainAxisAlignment: MainAxisAlignment.start,
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-
-                               Text('Contact : ${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                               Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                               Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                               Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                             ],),
-                           trailing: Container(
-                             width: 140,
-                             child: ElevatedButton.icon(onPressed: () async {
-                               // try{
-                               //   new Database().deleteImage(data['profileimage']);
-                               //   new Database().deleteImage(data['licenseimage']);
-                               //   await Firestore.instance.collection('company').document(data[index]!.id).delete();
-                               //   await Firestore.instance.collection('products').document(data[index]!.id).delete();
-                               //   EasyLoading.showSuccess('Deleted');
-                               //
-                               // }
-                               // catch(e)
-                               // {
-                               //   EasyLoading.showError('$e');
-                               // }
-                             }, icon: Icon(Icons.delete,color: Colors.white,), label: Text('Delete',style: TextStyle(
-                               color: Colors.white
-                             ),)),
-                           ),
+                         Text('    ${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
+                         InkWell(
+                           onTap: (){
+                             Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
+                           },
+                           child: Container(
+                             height:100,
+                             width: 150,
+                             clipBehavior: Clip.antiAlias,
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(12),
+                                 border: Border.all(color: Colors.black12)
+                             ),
+                             child:Image.network('${data[index]!['profileimage']}',fit: BoxFit.fill,),),
                          ),
-                       )
-                     ],);
+                         Text(' '),
+                         InkWell(
+                           onTap: (){
+                             Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
+                           },
+                           child: Container(
+                             height:100,
+                             width: 150,
+                             clipBehavior: Clip.antiAlias,
+                             decoration: BoxDecoration(
+                                 borderRadius: BorderRadius.circular(12),
+                                 border: Border.all(color: Colors.black12)
+                             ),
+                             child:Image.network('${data[index]!['licenseimage']}',fit: BoxFit.fill,),),
+                         ),
+
+
+                         Container(
+                           width: size.width*0.61,
+                           child: ListTile(
+                             title: Text('${data[index]!['name']}'),
+
+                             subtitle: Column(
+                               mainAxisAlignment: MainAxisAlignment.start,
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+
+                                 Text('Contact : ${data[index]!['phone']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                 Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                 Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                                 Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
+                               ],),
+                             trailing:Wrap(children: [
+                               Container(
+                                 width: 140,
+                                 child: ElevatedButton.icon(onPressed: () async {
+                                 Navigator.push(context, Myroute(Products(companydetails: data[index],)));
+                                 }, icon: Icon(Icons.panorama_rounded,color: Colors.white,), label: Text('Products',style: TextStyle(
+                                     color: Colors.white
+                                 ),)),
+                               ),
+                               Text(' '),
+                               Container(
+                                 width: 140,
+                                 child: ElevatedButton.icon(onPressed: () async {
+
+                                 }, icon: Icon(Icons.favorite_border,color: Colors.white,), label: Text('Orders',style: TextStyle(
+                                     color: Colors.white
+                                 ),)),
+                               )
+                             ],),
+                           ),
+                         )
+                       ],),
+                     );
                    });
              },
            ),

@@ -245,37 +245,9 @@ class View_Network_Image extends StatelessWidget{
   return Scaffold(
     backgroundColor: Colors.lightGreen,
 
-    appBar:AppBar(
-      elevation: 0,
-      centerTitle: true,
-      toolbarHeight: 30,
-      backgroundColor:Colors.lightGreen,
-      leadingWidth: 110,
-      leading: IconButton(onPressed: (){
-        Navigator.of(context).pop();
-      },icon: Icon(Icons.arrow_back,color: Colors.white,),),
-      actions: [
-        TextButton(onPressed: (){
-          appWindow.minimize();
-        }, child: Text('—',style: TextStyle(color: Colors.white,fontSize: 20),),),
-        IconButton(onPressed: (){
-          if(appWindow.isMaximized){
-            appWindow.size=Size(800,800);
-            appWindow.maximizeOrRestore();
-
-          }
-
-          if(appWindow.size.height<size.height){
-            appWindow.maximize();
-
-          }
-
-        }, icon: Icon(Icons.web_asset,color: Colors.white,size: 20,)),
-        IconButton(onPressed: (){
-          appWindow.close();
-        }, icon: Icon(Icons.close,color: Colors.white,size: 20,)),
-
-      ],),
+    appBar:PreferredSize(
+      preferredSize: Size(30,30),
+      child:   MyAppBar(),),
     body: Container(
 
       child: Center(child: InteractiveViewer(
@@ -289,11 +261,6 @@ class View_Network_Image extends StatelessWidget{
 }
 
 
-
-
-// AppBar(elevation: 0,leading: IconButton(onPressed: (){
-// Navigator.of(context).pop();
-// },icon: Icon(Icons.arrow_back_rounded,color: Colors.white,),),),
 
 
 
