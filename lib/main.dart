@@ -3,10 +3,12 @@
 import 'dart:async';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:easyagroadmin/providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 import 'home.dart';
@@ -68,21 +70,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
+    return ChangeNotifierProvider(
+      create: (context) => ValueProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.lightGreen,
 
 
+        ),
+        home:FutureBuilder(
+          future: Get_user(),
+          builder: (context,snapshot){
+            return snapshot.data==null ? Login():home(index: 0,);
+
+          },
+        ) ,
+        builder: EasyLoading.init(),
       ),
-      home:FutureBuilder(
-        future: Get_user(),
-        builder: (context,snapshot){
-          return snapshot.data==null ? Login():home(index: 0,);
-
-        },
-      ) ,
-      builder: EasyLoading.init(),
     );
   }
 }

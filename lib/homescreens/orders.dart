@@ -1,6 +1,8 @@
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../supporting.dart';
+
 class Orders extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -14,33 +16,35 @@ class Orders extends StatelessWidget{
          height: 600,
          width: 600,
          child: StreamBuilder(
-             stream: Firestore.instance.collection('orders').where('status' ,isEqualTo: 'confirmed').get().asStream(),
+             stream: Firestore.instance.collection('orders').stream,
              builder: (context,snap){
+
+               if(!snap.hasData){
+                 return show_progress_indicator(border_color: Colors.lightGreen,);
+               }
+
            var data=snap.data!.asMap();
-           print(data);
-           return data.length==0 ? Column(
+               String input = "${data}";
+               int start = input.indexOf('{');
+               int end = input.lastIndexOf('}');
+               String result = input.substring(start, end + 1);
+               print(result); // {0: /orders/6buI
+
+               return data!.length==0 ? Column(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
                Icon(Icons.favorite,size: 45,color: Colors.lightGreen,),
                Text('No Orders',style: TextStyle(fontWeight: FontWeight.w500),),
              ],):
 
-             ListView.builder(itemBuilder: (context,index){
+             ListView.builder(
+                 itemCount: data.length,
+                 itemBuilder: (context,index){
              Container(
                width: size.width*0.61,
+               height: 100,
                child: ListTile(
-                 title: Text('j'),
-
-                 // subtitle: Column(
-                 //   mainAxisAlignment: MainAxisAlignment.start,
-                 //   crossAxisAlignment: CrossAxisAlignment.start,
-                 //   children: [
-                 //
-                 //     Text('Contact : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                 //     Text('Email : ${data[index]!['email']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                 //     Text('License :${data[index]!['license']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                 //     Text('Address : ${data[index]!['address']}',style: TextStyle(fontWeight: FontWeight.w500),),
-                 //   ],),
+                 title: Text(''),
 
                ),
              );
@@ -52,3 +56,21 @@ class Orders extends StatelessWidget{
   }
 
 }
+
+
+
+
+
+
+
+
+//
+// data.clear();
+// documentslist.clear();
+// for(int i=0;i<lengthc.length;i++){
+// var s=lengthc[i].toString().split('{');
+// documentslist.add('${s[0]}'.split('/'));
+// var d='${s[1]}'.split('}');
+// print((d));
+// data.add(d);
+// }
