@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 
 import '../providers.dart';
+import 'charts.dart';
 
 
 
@@ -39,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
           ),
 
       )),),
-         body:Wrap(
+         body:ListView(
            children: [
 
 
@@ -48,219 +49,231 @@ class _DashboardState extends State<Dashboard> {
              //     return Text('Total : ${valueProvider.value}',style: TextStyle(fontSize: 19,fontWeight: FontWeight.bold),);
              //   },
              // ),
-             SizedBox(width: 6,),
-             TweenAnimationBuilder(
-                 duration: Duration(seconds: 2),
-                 tween: Tween(begin: 0.1,end: 0.7),
-                 builder: (context,val,o) {
-                   return Stack(
-                     children: [
-                       Container(
-                         height: 90,
-                         width: size.width*0.21,
-                         decoration: BoxDecoration(
+            Row(children: [
+              SizedBox(width: 6,),
+              TweenAnimationBuilder(
+                  duration: Duration(seconds: 2),
+                  tween: Tween(begin: 0.1,end: 0.7),
+                  builder: (context,val,o) {
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 90,
+                          width: size.width*0.21,
+                          decoration: BoxDecoration(
 
-                             gradient: LinearGradient(
-                                 colors: [Colors.lightGreen.shade700,Colors.lightGreen]
-                             ),
-                             border: Border.all(color: Colors.black12),
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-
-
-                       ),
-                       Positioned(
-                         top:10,
-                         left:60,
-
-                         child: Text('Companies',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
-                       ,
-                       Positioned(
-                           top:30,
-                           left:60,
-                           child:Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               Row(children: [
-                                 Text('Verified :',style: TextStyle(color: Colors.white,fontSize: 15),),
-                                 Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
-                               Row(children: [
-                                 Text('Unverified:',style: TextStyle(color: Colors.white,fontSize: 15)),
-                                 Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
-
-                             ],))
-
-                       ,  Positioned(
-                           top:10,
-                           left:0,
-                           child:Icon(Icons.house,color: Colors.white,size: 60,))
-                     ],
-                   );
-                 }
-             ),
+                              gradient: LinearGradient(
+                                  colors: [Colors.lightGreen.shade700,Colors.lightGreen]
+                              ),
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
 
 
+                        ),
+                        Positioned(
+                          top:10,
+                          left:60,
 
+                          child: Text('Companies',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
+                        ,
+                        Positioned(
+                            top:30,
+                            left:60,
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Text('Verified :',style: TextStyle(color: Colors.white,fontSize: 15),),
+                                  Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
+                                Row(children: [
+                                  Text('Unverified:',style: TextStyle(color: Colors.white,fontSize: 15)),
+                                  Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
 
-             SizedBox(width: 6,),
-             TweenAnimationBuilder(
-                 duration: Duration(seconds: 2),
-                 tween: Tween(begin: 0.1,end: 0.7),
-                 builder: (context,val,o) {
-                   return Stack(
-                     children: [
-                       Container(
-                         height: 90,
-                         width: size.width*0.21,
-                         decoration: BoxDecoration(
+                              ],))
 
-                             gradient: LinearGradient(
-                                 colors: [Colors.lightGreen.shade700,Colors.lightGreen]
-                             ),
-                             border: Border.all(color: Colors.black12),
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-
-
-                       ),
-                       Positioned(
-                         top:10,
-                         left:60,
-
-                         child: Text('Dealers',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
-                       ,
-                       Positioned(
-                           top:30,
-                           left:60,
-                           child:Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               Row(children: [
-                                 Text('Verified :',style: TextStyle(color: Colors.white,fontSize: 15),),
-                                 Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
-                               Row(children: [
-                                 Text('Unverified:',style: TextStyle(color: Colors.white,fontSize: 15)),
-                                 Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
-
-                             ],))
-
-                       ,  Positioned(
-                           top:10,
-                           left:0,
-                           child:Icon(Icons.person,color: Colors.white,size: 60,))
-                     ],
-                   );
-                 }
-             ),
+                        ,  Positioned(
+                            top:10,
+                            left:0,
+                            child:Icon(Icons.house,color: Colors.white,size: 60,))
+                      ],
+                    );
+                  }
+              ),
 
 
 
 
+              SizedBox(width: 6,),
+              TweenAnimationBuilder(
+                  duration: Duration(seconds: 2),
+                  tween: Tween(begin: 0.1,end: 0.7),
+                  builder: (context,val,o) {
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 90,
+                          width: size.width*0.21,
+                          decoration: BoxDecoration(
 
-             SizedBox(width: 6,),
-             TweenAnimationBuilder(
-                 duration: Duration(seconds: 2),
-                 tween: Tween(begin: 0.1,end: 0.7),
-                 builder: (context,val,o) {
-                   return Stack(
-                     children: [
-                       Container(
-                         height: 90,
-                         width: size.width*0.21,
-                         decoration: BoxDecoration(
-
-                             gradient: LinearGradient(
-                                 colors: [Colors.lightGreen.shade700,Colors.lightGreen]
-                             ),
-                             border: Border.all(color: Colors.black12),
-                             borderRadius: BorderRadius.circular(10)
-                         ),
+                              gradient: LinearGradient(
+                                  colors: [Colors.lightGreen.shade700,Colors.lightGreen]
+                              ),
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
 
 
-                       ),
-                       Positioned(
-                         top:10,
-                         left:60,
+                        ),
+                        Positioned(
+                          top:10,
+                          left:60,
 
-                         child: Text('Complains',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
-                       ,
-                       Positioned(
-                           top:30,
-                           left:60,
-                           child:Column(
-                             crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               Row(children: [
-                                 Text('Resolved :',style: TextStyle(color: Colors.white,fontSize: 15),),
-                                 Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
-                               Row(children: [
-                                 Text('Pending :',style: TextStyle(color: Colors.white,fontSize: 15)),
-                                 Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
-                               ],),
+                          child: Text('Dealers',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
+                        ,
+                        Positioned(
+                            top:30,
+                            left:60,
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Text('Verified :',style: TextStyle(color: Colors.white,fontSize: 15),),
+                                  Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
+                                Row(children: [
+                                  Text('Unverified:',style: TextStyle(color: Colors.white,fontSize: 15)),
+                                  Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
 
-                             ],))
+                              ],))
 
-                       ,  Positioned(
-                           top:10,
-                           left:0,
-                           child:Icon(Icons.report,color: Colors.white,size: 60,))
-                     ],
-                   );
-                 }
-             ),
-
+                        ,  Positioned(
+                            top:10,
+                            left:0,
+                            child:Icon(Icons.person,color: Colors.white,size: 60,))
+                      ],
+                    );
+                  }
+              ),
 
 
 
-             SizedBox(width: 6,),
-             TweenAnimationBuilder(
-                 duration: Duration(seconds: 2),
-                 tween: Tween(begin: 0.1,end: 0.7),
-                 builder: (context,val,o) {
-                   return Stack(
-                     children: [
-                       Container(
-                         height: 90,
-                         width: size.width*0.21,
-                         decoration: BoxDecoration(
-
-                             gradient: LinearGradient(
-                                 colors: [Colors.lightGreen.shade700,Colors.lightGreen]
-                             ),
-                             border: Border.all(color: Colors.black12),
-                             borderRadius: BorderRadius.circular(10)
-                         ),
 
 
-                       ),
-                       Positioned(
-                         top:10,
-                         left:60,
+              SizedBox(width: 6,),
+              TweenAnimationBuilder(
+                  duration: Duration(seconds: 2),
+                  tween: Tween(begin: 0.1,end: 0.7),
+                  builder: (context,val,o) {
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 90,
+                          width: size.width*0.21,
+                          decoration: BoxDecoration(
 
-                         child: Text('Farmers',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
-                       ,
-                       Positioned(
-                           top:30,
-                           left:60,
-                           child:Text('Total : 565',style: TextStyle(color: Colors.white,fontSize: 15)),)
+                              gradient: LinearGradient(
+                                  colors: [Colors.lightGreen.shade700,Colors.lightGreen]
+                              ),
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
 
-                       ,  Positioned(
-                           top:10,
-                           left:0,
-                           child:Icon(Icons.accessibility_sharp,color: Colors.white,size: 60,))
-                     ],
-                   );
-                 }
-             ),
 
-            Container(
-              height: size.height*0.8,
-              child: ListView(children: [
+                        ),
+                        Positioned(
+                          top:10,
+                          left:60,
+
+                          child: Text('Complains',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
+                        ,
+                        Positioned(
+                            top:30,
+                            left:60,
+                            child:Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Text('Resolved :',style: TextStyle(color: Colors.white,fontSize: 15),),
+                                  Text(' 556',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
+                                Row(children: [
+                                  Text('Pending :',style: TextStyle(color: Colors.white,fontSize: 15)),
+                                  Text(' 56',style: TextStyle(color: Colors.white,fontSize: 16)),
+                                ],),
+
+                              ],))
+
+                        ,  Positioned(
+                            top:10,
+                            left:0,
+                            child:Icon(Icons.report,color: Colors.white,size: 60,))
+                      ],
+                    );
+                  }
+              ),
+
+
+
+
+              SizedBox(width: 6,),
+              TweenAnimationBuilder(
+                  duration: Duration(seconds: 2),
+                  tween: Tween(begin: 0.1,end: 0.7),
+                  builder: (context,val,o) {
+                    return Stack(
+                      children: [
+                        Container(
+                          height: 90,
+                          width: size.width*0.21,
+                          decoration: BoxDecoration(
+
+                              gradient: LinearGradient(
+                                  colors: [Colors.lightGreen.shade700,Colors.lightGreen]
+                              ),
+                              border: Border.all(color: Colors.black12),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+
+
+                        ),
+                        Positioned(
+                          top:10,
+                          left:60,
+
+                          child: Text('Farmers',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w700,color: Colors.white),),)
+                        ,
+                        Positioned(
+                          top:30,
+                          left:60,
+                          child:Text('Total : 565',style: TextStyle(color: Colors.white,fontSize: 15)),)
+
+                        ,  Positioned(
+                            top:10,
+                            left:0,
+                            child:Icon(Icons.accessibility_sharp,color: Colors.white,size: 60,))
+                      ],
+                    );
+                  }
+              ),
+
+            ],),
+
+             Row(children: [
+               PieChartPage(),
+               Column(children: [
+                 Container(height: 20,
+                   decoration: BoxDecoration(
+                     color: Colors.orange,
+                     shape: BoxShape.rectangle),
+                 )
+               ],)
+
+             ],),
+
                 Text('\n      Companies',style: TextStyle(fontWeight: FontWeight.bold),),
                 LineChartWidget(
                   spots: [
@@ -301,7 +314,7 @@ class _DashboardState extends State<Dashboard> {
                 Text('\n          Complains',style: TextStyle(fontWeight: FontWeight.bold)),
                 LineChartWidget(
                   spots: [
-                    FlSpot(0, 2),
+                    FlSpot(2, 3),
                     FlSpot(1, 4),
                     FlSpot(2, 3),
                     FlSpot(3, 5),
@@ -311,8 +324,7 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
 
-              ],),
-            )
+
 
 
 
@@ -372,9 +384,9 @@ class LineChartWidget extends StatelessWidget {
               dotData: FlDotData(show: false),
             ),
           ],
-          minX: 0,
+          minX: 5,
           maxX: spots.length.toDouble() - 1,
-          minY: 0,
+          minY: 5,
           maxY: _calculateMaxY(spots),
         ),
       ),
@@ -390,7 +402,7 @@ class LineChartWidget extends StatelessWidget {
       }
     }
 
-    return maxY + 2;
+    return maxY + 50;
   }
 }
 
