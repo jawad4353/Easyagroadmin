@@ -3,6 +3,8 @@
 
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import '../database.dart';
 import '../supporting.dart';
 
 
@@ -175,9 +177,22 @@ class _ProductsState extends State<Products> {
 
                                                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                                                  child: Text('Delete',style: TextStyle(color: Colors.lightGreen),),
-                                                 onPressed: () {
-                                                   // Navigate to product details screen
+                                                 onPressed: () async {
+                                                   EasyLoading.show(status: 'Deleteing');
+                                                 try{
+                                                   new Database().deleteImage(data[index]!['image']);
+                                                   var s=await  Firestore.instance.collection('products').where('productid',isEqualTo: '${data[index]!['productid']}').get();
+                                                   await Firestore.instance.collection('products').document(s[0].id).delete();
+                                                   setState(() {
+                                                     EasyLoading.showSuccess('Deleted');
+                                                   });
+                                                 }
+                                                 catch(e){
+                                                   EasyLoading.showError('Error');
+                                                 }
+
                                                  },
+
 
                                                ),
                                              ),

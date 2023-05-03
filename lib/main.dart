@@ -6,6 +6,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:easyagroadmin/providers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart';
+import 'package:firedart/generated/google/protobuf/timestamp.pb.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import 'package:window_size/window_size.dart';
 import 'home.dart';
 import 'login.dart';
 import 'dart:ui';
+import 'package:dcdg/dcdg.dart';
 
 
 
@@ -34,7 +36,8 @@ Firestore.initialize(projectId);
 
 
 
-
+  var s=DateTime.now();
+  print(s);
 
 
   final window = WidgetsBinding.instance.window;

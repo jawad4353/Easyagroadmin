@@ -2,13 +2,16 @@
 
 import 'dart:async';
 
+import 'package:easyagroadmin/database.dart';
 import 'package:easyagroadmin/supporting.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
-
-
+import 'package:intl/intl.dart';
+import 'package:dcdg/dcdg.dart';
+import '../home.dart';
 import '../providers.dart';
 import 'charts.dart';
 
@@ -20,8 +23,6 @@ class Dashboard extends StatefulWidget{
 }
 
 class _DashboardState extends State<Dashboard> {
-
-
   @override
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
@@ -263,66 +264,138 @@ class _DashboardState extends State<Dashboard> {
             ],),
 
              Row(children: [
+               SizedBox(width: 10,),
+               Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                 Color_displayer_chart(name: 'Companies',color: Colors.blue,),
+                 SizedBox(height: 5,),
+                 Color_displayer_chart(name: 'Dealers',color: Colors.orange,),
+                   SizedBox(height: 5,),
+                 Color_displayer_chart(name: 'Farmers',color: Colors.lightGreen.shade700,),
+               ],),
                PieChartPage(),
-               Column(children: [
-                 Container(height: 20,
-                   decoration: BoxDecoration(
-                     color: Colors.orange,
-                     shape: BoxShape.rectangle),
-                 )
-               ],)
+               Text('\n       Companies',style: TextStyle(fontWeight: FontWeight.bold)),
+               LineChartWidget(
+                 spots: [
+                   FlSpot(0, 2),
+                   FlSpot(1, 4),
+                   FlSpot(2, 3),
+                   FlSpot(3, 5),
+                   FlSpot(4, 4),
+                   FlSpot(5, 6),
+                   FlSpot(6, 5),
+                 ],
+               ),
+
+
+
 
              ],),
 
-                Text('\n      Companies',style: TextStyle(fontWeight: FontWeight.bold),),
-                LineChartWidget(
-                  spots: [
-                    FlSpot(0, 2),
-                    FlSpot(1, 4),
-                    FlSpot(2, 3),
-                    FlSpot(3, 5),
-                    FlSpot(4, 4),
-                    FlSpot(5, 6),
-                    FlSpot(6, 5),
-                  ],
-                ),
-                Text('\n      Dealers',style: TextStyle(fontWeight: FontWeight.bold)),
-                LineChartWidget(
-                  spots: [
-                    FlSpot(0, 2),
-                    FlSpot(1, 4),
-                    FlSpot(2, 3),
-                    FlSpot(3, 5),
-                    FlSpot(4, 4),
-                    FlSpot(5, 6),
-                    FlSpot(6, 5),
-                  ],
-                ),
-                Text('\n       Farmers',style: TextStyle(fontWeight: FontWeight.bold)),
-                LineChartWidget(
-                  spots: [
-                    FlSpot(0, 2),
-                    FlSpot(1, 4),
-                    FlSpot(2, 3),
-                    FlSpot(3, 5),
-                    FlSpot(4, 4),
-                    FlSpot(5, 6),
-                    FlSpot(6, 5),
-                  ],
-                ),
+                Text('\n      Farmers',style: TextStyle(fontWeight: FontWeight.bold),),
 
-                Text('\n          Complains',style: TextStyle(fontWeight: FontWeight.bold)),
-                LineChartWidget(
-                  spots: [
-                    FlSpot(2, 3),
-                    FlSpot(1, 4),
-                    FlSpot(2, 3),
-                    FlSpot(3, 5),
-                    FlSpot(4, 4),
-                    FlSpot(5, 6),
-                    FlSpot(6, 5),
-                  ],
-                ),
+             StreamBuilder(
+               stream: Firestore.instance.collection('farmers').stream,
+                 builder: (context,snap){
+                   if(!snap.hasData){
+                     return show_progress_indicator(border_color: Colors.lightGreen,);
+                   }
+                   var data=snap.data!.asMap();
+                   return  data.length==0 ? Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Icon(Icons.no_drinks,size: 45,color: Colors.lightGreen,),
+                       Text('No Farmers ',style: TextStyle(fontWeight: FontWeight.w500),),
+                     ],):
+                   Container(
+                     height: size.height*0.35,
+                     child: ListView.builder(
+                       itemCount: data.length,
+                         itemBuilder:(context,index){
+                           final date = DateTime.parse('${data[index]!['date']}');
+                           final formattedDate = DateFormat('yyyy-MM-dd HH:mm').format(date);
+                          return Container(
+                            padding: EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border(top: BorderSide(color: Colors.black12),bottom: BorderSide(color: Colors.black12) )
+                            ),
+
+                            child: Wrap(children: [
+                             if( data[index]!['image']!='')
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['image'],)));
+                                },
+                                child: Container(
+                                  height:100,
+                                  width: 150,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.grey)
+                                  ),
+
+                                  child:Image.network('${data[index]!['image']}',fit: BoxFit.fill,),),
+                              ),
+                              if( data[index]!['image']=='')
+                              InkWell(
+                                onTap: (){
+
+                                },
+                                child: Container(
+                                  height:100,
+                                  width: 150,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.grey)
+                                  ),
+
+                                  child:Image.asset('images/noimage.png',fit: BoxFit.fill,),),
+                              ),
+
+                     Container(
+                       width: size.width*0.7,
+                       child: ListTile(
+                         title: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                             Text('${data[index]!['name']}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
+                             Text('Email :${data[index]!['email']}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+                               Text('Date :${formattedDate}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+
+                             ],),
+                         trailing: ElevatedButton.icon(onPressed: () async {
+                           EasyLoading.show(status:'Deleting');
+                          try{
+                            if(data[index]!['image']!=''){
+                              new Database().deleteImage(data[index]!['image']);
+                            }
+                            var s=await Firestore.instance.collection('farmers').where('email',isEqualTo: '${data[index]!['email']}').get();
+                            await Firestore.instance.collection('farmers').document(s[0].id).delete();
+                            setState(() {
+                              EasyLoading.showSuccess('Deleted');
+                            });
+                          }
+                          catch(e){
+                            EasyLoading.showError('Not Deleted');
+                          }
+                         }, icon: Icon(Icons.delete,color: Colors.white,), label: Text('Delete',style: TextStyle(color: Colors.white),))
+                         ,
+                       ),
+                     )
+                             ,
+
+                            ],),
+                          );
+                         }),
+                   );
+
+             })
+
+
 
 
 
@@ -337,73 +410,5 @@ class _DashboardState extends State<Dashboard> {
 
 
 
-
-
-
-class LineChartWidget extends StatelessWidget {
-  final List<FlSpot> spots;
-
-  const LineChartWidget({Key? key, required this.spots}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      child: LineChart(
-        LineChartData(
-          lineTouchData: LineTouchData(enabled: false),
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: true,
-            getDrawingHorizontalLine: (value) {
-              return FlLine(
-                color: Colors.grey,
-                strokeWidth: 1,
-              );
-            },
-            getDrawingVerticalLine: (value) {
-              return FlLine(
-                color: Colors.grey,
-                strokeWidth: 1,
-              );
-            },
-          ),
-          borderData: FlBorderData(
-            show: true,
-            border: Border.all(
-              color: Colors.grey,
-              width: 1,
-            ),
-          ),
-          lineBarsData: [
-            LineChartBarData(
-              spots: spots,
-              isCurved: true,
-              color: Colors.lightGreen,
-              barWidth: 3,
-              dotData: FlDotData(show: false),
-            ),
-          ],
-          minX: 5,
-          maxX: spots.length.toDouble() - 1,
-          minY: 5,
-          maxY: _calculateMaxY(spots),
-        ),
-      ),
-    );
-  }
-
-  double _calculateMaxY(List<FlSpot> spots) {
-    double maxY = 0;
-
-    for (var spot in spots) {
-      if (spot.y > maxY) {
-        maxY = spot.y;
-      }
-    }
-
-    return maxY + 50;
-  }
-}
 
 

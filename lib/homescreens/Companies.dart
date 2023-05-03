@@ -187,7 +187,7 @@ class _CompaniesState extends State<Companies> {
                          Text('    ${index+1}     ',style: TextStyle(fontSize: 16,color: Colors.lightGreen,fontWeight: FontWeight.bold),),
                          InkWell(
                            onTap: (){
-                             Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['licenseimage'],)));
+                             Navigator.push(context, Myroute(View_Network_Image(url: data[index]!['profileimage'],)));
                            },
                            child: Container(
                              height:100,
