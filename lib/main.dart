@@ -73,8 +73,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ValueProvider(),
+    return MultiProvider(
+     providers: [
+       ChangeNotifierProvider(create: (context) => ValueProvider(),),
+       ChangeNotifierProvider(create: (context) => HomeProvider(),)],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -85,7 +87,7 @@ class MyApp extends StatelessWidget {
         home:FutureBuilder(
           future: Get_user(),
           builder: (context,snapshot){
-            return snapshot.data==null ? Login():home(index: 0,);
+            return snapshot.data==null ? Login():home();
 
           },
         ) ,

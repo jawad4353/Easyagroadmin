@@ -16,3 +16,14 @@ class ValueProvider extends ChangeNotifier {
 
 // Define your provider properties and methods here
 }
+
+class HomeProvider with ChangeNotifier {
+  int _index = 0;
+
+  int get index => _index;
+
+  void setIndex(int newIndex) {
+    _index = newIndex;
+    notifyListeners();
+  }
+}

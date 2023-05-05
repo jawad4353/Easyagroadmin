@@ -86,7 +86,7 @@ class _Otp_verifyState extends State<Otp_verify> {
                           await pref.setString("email", "${widget.email}");
                         }
                         EasyLoading.showSuccess('Login Sucessful');
-                        Navigator.pushReplacement(context,Myroute(home(index: 0,)) );
+                        Navigator.pushReplacement(context,Myroute(home()) );
                         return;
                       }
                       else{

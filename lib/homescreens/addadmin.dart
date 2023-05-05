@@ -608,7 +608,7 @@ class _Update_adminState extends State<Update_admin> {
                             'countrycode':'${widget.countrycode}'
                           });
                           EasyLoading.showSuccess('Updated');
-                          Navigator.pushReplacement(context, Myroute(home(index: 5,)));
+                          Navigator.pushReplacement(context, Myroute(home()));
                           return ;
                         }
                         final file = File(_image.path);
@@ -628,7 +628,7 @@ class _Update_adminState extends State<Update_admin> {
                         }
 
                         EasyLoading.showSuccess('Updated');
-                        Navigator.pushReplacement(context, Myroute(home(index: 5,)));
+                        Navigator.pushReplacement(context, Myroute(home()));
                       }
                       catch(e){
                         EasyLoading.showError('Error Updating Admin ${e}');

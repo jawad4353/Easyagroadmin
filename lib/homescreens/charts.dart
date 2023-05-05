@@ -8,6 +8,7 @@ class PieChartPage extends StatefulWidget {
   _PieChartPageState createState() => _PieChartPageState();
 }
 
+
 class _PieChartPageState extends State<PieChartPage> {
   int farmerCount = 0;
   int companyCount = 0;
@@ -40,70 +41,73 @@ class _PieChartPageState extends State<PieChartPage> {
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
     return Container(
-      height: size.height*0.37,
-      width: size.width*0.25,
-      child: PieChart(
+        height: size.height*0.37,
+        width: size.width*0.25,
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return PieChart(
+              PieChartData(
+                sections: [
+                  PieChartSectionData(
 
-        PieChartData(
+                    value: farmerCount.toDouble(),
+                    title: '${(farmerCount/total*100).toStringAsFixed(1)} %',
+                    color: Colors.lightGreen.shade700,
+                    radius: touchedIndex == 0 ? 90 : 70,
+                    titleStyle: TextStyle(
+                      fontSize: touchedIndex == 0 ? 18 : 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  PieChartSectionData(
+                    value: companyCount.toDouble(),
+                    title: '${(companyCount/total*100).toStringAsFixed(1)} %',
+                    color: Colors.blue,
+                    radius: touchedIndex == 1 ? 90 : 70,
+                    titleStyle: TextStyle(
+                      fontSize: touchedIndex == 1 ? 18 : 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  PieChartSectionData(
+                    value: dealerCount.toDouble(),
+                    title: '${(dealerCount/total*100).toStringAsFixed(1)} %',
+                    color: Colors.orange,
+                    radius: touchedIndex == 2 ? 90 : 70,
+                    titleStyle: TextStyle(
+                      fontSize: touchedIndex == 2 ? 18 : 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+                sectionsSpace: 0,
+                centerSpaceRadius: 60,
+                borderData: FlBorderData(
+                  show: true,
+                ),
+                centerSpaceColor: Colors.white,
+                pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event,  response) {
+                    setState(() {
+                      if (event is PointerUpEvent) {
+                        touchedIndex = -1;
+                      } else if (response!.touchedSection != null) {
+                        touchedIndex = response.touchedSection!.touchedSectionIndex;
+                      }
+                    });
+                  },
+                ),
 
-          sections: [
-            PieChartSectionData(
 
-              value: farmerCount.toDouble(),
-              title: '${(farmerCount/total*100).toStringAsFixed(1)} %',
-              color: Colors.lightGreen.shade700,
-              radius: touchedIndex == 0 ? 90 : 70,
-              titleStyle: TextStyle(
-                fontSize: touchedIndex == 0 ? 18 : 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+
               ),
-            ),
-            PieChartSectionData(
-              value: companyCount.toDouble(),
-              title: '${(companyCount/total*100).toStringAsFixed(1)} %',
-              color: Colors.blue,
-              radius: touchedIndex == 1 ? 90 : 70,
-              titleStyle: TextStyle(
-                fontSize: touchedIndex == 1 ? 18 : 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            PieChartSectionData(
-              value: dealerCount.toDouble(),
-              title: '${(dealerCount/total*100).toStringAsFixed(1)} %',
-              color: Colors.orange,
-              radius: touchedIndex == 2 ? 90 : 70,
-              titleStyle: TextStyle(
-                fontSize: touchedIndex == 2 ? 18 : 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
-          sectionsSpace: 0,
-          centerSpaceRadius: 60,
-          borderData: FlBorderData(
-            show: true,
-          ),
-          centerSpaceColor: Colors.white,
-          pieTouchData: PieTouchData(
-            touchCallback: (FlTouchEvent event,  response) {
-              setState(() {
-                if (event is PointerUpEvent) {
-                  touchedIndex = -1;
-                } else if (response!.touchedSection != null) {
-                  touchedIndex = response.touchedSection!.touchedSectionIndex;
-                }
-              });
-            },
-          ),
-
-
-
+            );
+          }
         ),
-      ),
+
     );
   }
 }

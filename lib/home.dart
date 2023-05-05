@@ -5,11 +5,13 @@
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easyagroadmin/providers.dart';
 import 'package:easyagroadmin/supporting.dart';
 import 'package:firedart/firedart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart';
 
@@ -22,22 +24,29 @@ import 'homescreens/diseases.dart';
 import 'homescreens/orders.dart';
 import 'login.dart';
 
+
+ GlobalKey<homeState> homeStateKey = GlobalKey<homeState>();
+
 class home extends StatefulWidget{
-  int index;
-  home({required this.index});
+
+
   @override
-  State<home> createState() => _homeState();
+  State<home> createState() => homeState();
 }
 
-class _homeState extends State<home> {
+class homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm(),Diseases()];
   var current_email;
+
+
+
  @override
   void initState() {
     Get_email();
     super.initState();
   }
+
 
   Get_email() async {
     SharedPreferences pref =await SharedPreferences.getInstance();
@@ -107,9 +116,8 @@ class _homeState extends State<home> {
               children: [
 
               ElevatedButton.icon(onPressed: (){
-                setState(() {
-                  widget.index=0;
-                });
+                Provider.of<HomeProvider>(context,listen: false).setIndex(0);
+
               },style:ButtonStyle(
                  backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                 elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -119,9 +127,8 @@ class _homeState extends State<home> {
 
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
-                  setState(() {
-                    widget.index=1;
-                  });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(1);
+
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -132,9 +139,8 @@ class _homeState extends State<home> {
 
 
                 ElevatedButton.icon(onPressed: (){
-                  setState(() {
-                    widget.index=2;
-                  });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(2);
+
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -144,9 +150,8 @@ class _homeState extends State<home> {
 ,
                 SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
-                  setState(() {
-                    widget.index=3;
-                  });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(3);
+
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -156,9 +161,8 @@ class _homeState extends State<home> {
 ,
                 SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
-                  setState(() {
-                    widget.index=4;
-                  });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(4);
+
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) =>Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -168,9 +172,8 @@ class _homeState extends State<home> {
 
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
-                  setState(() {
-                    widget.index=5;
-                  });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(5);
+
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -182,9 +185,8 @@ class _homeState extends State<home> {
 
 
          ,ElevatedButton.icon(onPressed: (){
-           setState(() {
-             widget.index=6;
-           });
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(6);
+
                 },style:ButtonStyle(
                backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -214,9 +216,14 @@ class _homeState extends State<home> {
              ],),
            )),
 
-       Expanded(
-           flex: 8,
-           child: screens[widget.index]),
+       Consumer<HomeProvider>(
+         builder: (context,a,b){
+           return Expanded(
+               flex: 8,
+               child: screens[a.index]);
+         },
+
+       ),
 
      ],),
 
