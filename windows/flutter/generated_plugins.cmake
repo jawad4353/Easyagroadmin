@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   bitsdojo_window_windows
   desktop_window
+  firebase_core
   window_size
 )
 

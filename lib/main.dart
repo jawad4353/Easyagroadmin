@@ -81,14 +81,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.lightGreen,
-
-
         ),
         home:FutureBuilder(
           future: Get_user(),
           builder: (context,snapshot){
             return snapshot.data==null ? Login():home();
-
           },
         ) ,
         builder: EasyLoading.init(),

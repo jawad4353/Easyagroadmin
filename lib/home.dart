@@ -19,6 +19,7 @@ import 'homescreens/Companies.dart';
 import 'homescreens/Dealers.dart';
 import 'homescreens/Farmers.dart';
 import 'homescreens/addadmin.dart';
+import 'homescreens/complains.dart';
 import 'homescreens/dashboard.dart';
 import 'homescreens/diseases.dart';
 import 'homescreens/orders.dart';
@@ -36,7 +37,7 @@ class home extends StatefulWidget{
 
 class homeState extends State<home> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm(),Diseases()];
+  var screens=[Dashboard(),Orders(),Companies(),Dealers(),Farmers(),RegistrationForm(),Diseases(),View_complains()];
   var current_email;
 
 
@@ -173,7 +174,6 @@ class homeState extends State<home> {
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: (){
                   Provider.of<HomeProvider>(context,listen: false).setIndex(5);
-
                 },style:ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
                     elevation: MaterialStateProperty.resolveWith((states) => 0),
@@ -193,6 +193,14 @@ class homeState extends State<home> {
                overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)), icon: Icon(Icons.coronavirus,color: Colors.white,),
             label: Text('Diseases',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
+                ,ElevatedButton.icon(onPressed: (){
+                  Provider.of<HomeProvider>(context,listen: false).setIndex(7);
+
+                },style:ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.lightGreen.shade700),
+                    elevation: MaterialStateProperty.resolveWith((states) => 0),
+                    overlayColor: MaterialStateProperty.resolveWith((states) => Colors.black12)), icon: Icon(Icons.report,color: Colors.white,),
+                    label: Text('Complains',style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),))
 
                 , SizedBox(height: 6,),
                 ElevatedButton.icon(onPressed: () async {
@@ -215,6 +223,7 @@ class homeState extends State<home> {
               ],)
              ],),
            )),
+
 
        Consumer<HomeProvider>(
          builder: (context,a,b){

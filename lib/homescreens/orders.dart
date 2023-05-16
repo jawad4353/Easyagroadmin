@@ -1,3 +1,8 @@
+
+
+import 'dart:convert';
+
+import 'package:firedart/firestore/models.dart';
 import 'package:firedart/firestore/firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -24,53 +29,62 @@ class Orders extends StatelessWidget{
                }
 
            var data=snap.data!.asMap();
-               String input = "${data}";
-               int start = input.indexOf('{');
-               int end = input.lastIndexOf('}');
-               String result = input.substring(start, end + 1);
-               print(result); // {0: /orders/6buI
+              var result= mapToList(data);
+               var Mylist=[];
+              for(int i=0;i<result.length;i++)
+              {
+                var s='${result[i]}'.split('{');
+               Mylist.add(convertListStringToMap(s[1].substring(0,s[1].length-1)));
+              }
 
-               return data!.length==0 ? Column(
+               return Mylist!.length==0 ? Column(
              mainAxisAlignment: MainAxisAlignment.center,
              children: [
                Icon(Icons.favorite,size: 45,color: Colors.lightGreen,),
                Text('No Orders',style: TextStyle(fontWeight: FontWeight.w500),),
-             ],):
-
-             ListView.builder(
-                 itemCount: data.length,
-                 itemBuilder: (context,index){
-             Container(
-               width: size.width*0.61,
-               height: 100,
-               child: ListTile(
-                 title: Text(''),
-
-               ),
+             ],): Container(
+               height: size.height*0.9,
+               child: ListView.builder(
+                   itemCount: Mylist.length,
+                   itemBuilder: (context,index) {
+              return  ListTile(
+                   title: Text('${Mylist[index]['date']}     ${Mylist[index]['total']} R.s'),
+                  subtitle: Wrap(children: [
+                    Text('${Mylist[index]['address']}'),
+                    Text('${Mylist[index]['']}'),
+                    Text('${Mylist[index]['address']}'),
+                  ],),
+               );
+           }),
              );
-           });
          }),
        )
       ],),
     );
   }
 
+  List<Document> mapToList(Map<int, Document> map) {
+    return map.values.toList();
+  }
+
+}
+
+Map<String, dynamic> convertListStringToMap(String listString) {
+  List<String> keyValuePairs = listString.split(', ');
+
+  Map<String, dynamic> map = {};
+
+  for (String keyValuePair in keyValuePairs) {
+    List<String> keyValue = keyValuePair.split(': ');
+
+    String key = keyValue[0].trim();
+    String value = keyValue[1].trim();
+
+    map[key] = value;
+  }
+
+  return map;
 }
 
 
 
-
-
-
-
-
-//
-// data.clear();
-// documentslist.clear();
-// for(int i=0;i<lengthc.length;i++){
-// var s=lengthc[i].toString().split('{');
-// documentslist.add('${s[0]}'.split('/'));
-// var d='${s[1]}'.split('}');
-// print((d));
-// data.add(d);
-// }

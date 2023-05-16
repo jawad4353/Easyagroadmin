@@ -1,0 +1,8 @@
+@startuml
+class "easyagroadmin::supporting.dart::show_progress_indicator" {
+  +Color border_color
+  +Widget build()
+}
+
+
+@enduml
